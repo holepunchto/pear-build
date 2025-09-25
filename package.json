@@ -1,0 +1,26 @@
+{
+  "name": "pear-build",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "commonjs",
+  "description": "Build appling for a Pear application",
+  "author": "Holepunch Inc",
+  "license": "Apache-2.0",
+  "files": [],
+  "scripts": {
+    "test:gen": "brittle -r test/all.js test/*.test.js",
+    "test": "brittle-bare --coverage test/all.js",
+    "lint": "standard"
+  },
+  "dependencies": {
+    "bare-fs": "^4.4.4",
+    "bare-make": "^1.6.3",
+    "bare-path": "^3.0.0",
+    "bare-subprocess": "^5.1.4",
+    "pear-dump": "^1.0.0",
+    "which-runtime": "^1.3.2"
+  },
+  "devDependencies": {
+    "brittle": "^3.19.0"
+  }
+}
