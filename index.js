@@ -40,12 +40,12 @@ module.exports = async function build ({ link, dir }) {
       VERSION ${build.version}
       AUTHOR "${build.author}"
       DESCRIPTION "${build.description}"
-      MACOS_IDENTIFIER "${build.macos_identifier}"
-      MACOS_CATEGORY "${build.macos_category}"
-      MACOS_SIGNING_IDENTITY "${build.macos_signing_identity}"
-      WINDOWS_SIGNING_SUBJECT "${build.windows_signing_subject}"
-      WINDOWS_SIGNING_THUMBPRINT "${build.windows_signing_thumbprint}"
-      LINUX_CATEGORY "${build.linux_category}"
+      MACOS_IDENTIFIER "${build.darwin.identifier}"
+      MACOS_CATEGORY "${build.darwin.category}"
+      MACOS_SIGNING_IDENTITY "${build.darwin.signing-identity}"
+      WINDOWS_SIGNING_SUBJECT "${build.win32.signing-subject}"
+      WINDOWS_SIGNING_THUMBPRINT "${build.win32.signing-thumbprint}"
+      LINUX_CATEGORY "${build.linux.category}"
     )`
     await fs.promises.writeFile(repoDir + '/CMakeLists.txt', cmakeTxt)
 
