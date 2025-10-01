@@ -17,7 +17,7 @@
     "bare-make": "^1.6.3",
     "bare-path": "^3.0.0",
     "bare-subprocess": "^5.1.4",
-    "pear-appling": "github:holepunchto/pear-appling",
+    "pear-appling": "github:AndreiRegiani/pear-appling#pear-build-entry-point",
     "pear-dump": "^1.0.0",
     "which-runtime": "^1.3.2"
   },
