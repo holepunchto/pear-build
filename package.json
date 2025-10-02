@@ -17,7 +17,9 @@
     "bare-make": "^1.6.3",
     "bare-path": "^3.0.0",
     "cmake-pear": "^3.0.0",
-    "pear-dump": "^1.0.0"
+    "pear-dump": "^1.0.0",
+    "pear-link": "^4.2.0",
+    "streamx": "^2.23.0"
   },
   "devDependencies": {
     "brittle": "^3.19.0"
