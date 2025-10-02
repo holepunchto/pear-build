@@ -16,10 +16,8 @@
     "bare-fs": "^4.4.4",
     "bare-make": "^1.6.3",
     "bare-path": "^3.0.0",
-    "bare-subprocess": "^5.1.4",
     "pear-appling": "github:AndreiRegiani/pear-appling#pear-build-entry-point",
-    "pear-dump": "^1.0.0",
-    "which-runtime": "^1.3.2"
+    "pear-dump": "^1.0.0"
   },
   "devDependencies": {
     "brittle": "^3.19.0"
