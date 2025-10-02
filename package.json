@@ -16,7 +16,7 @@
     "bare-fs": "^4.4.4",
     "bare-make": "^1.6.3",
     "bare-path": "^3.0.0",
-    "pear-appling": "github:AndreiRegiani/pear-appling#pear-build-entry-point",
+    "cmake-pear": "^3.0.0",
     "pear-dump": "^1.0.0"
   },
   "devDependencies": {
