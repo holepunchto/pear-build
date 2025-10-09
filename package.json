@@ -16,8 +16,6 @@
     "bare-fs": "^4.4.4",
     "bare-make": "^1.6.3",
     "cmake-pear": "^3.0.0",
-    "pear-dump": "^1.0.0",
-    "pear-link": "^4.2.0",
     "streamx": "^2.23.0"
   },
   "devDependencies": {
