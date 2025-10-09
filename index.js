@@ -10,6 +10,8 @@ module.exports = async function build ({ link, dir }) {
     const distributables = path.join(dir, 'distributables', host)
     output.push({ tag: 'init', data: { distributables } })
 
+    // TODO: node_modules dependency
+
     output.push({ tag: 'generate' })
     await make.generate({ cwd: distributables })
 
