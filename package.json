@@ -15,6 +15,7 @@
   "dependencies": {
     "bare-fs": "^4.4.4",
     "bare-make": "^1.6.3",
+    "bare-subprocess": "^5.1.4",
     "cmake-pear": "^3.0.0",
     "streamx": "^2.23.0"
   },
