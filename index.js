@@ -8,7 +8,7 @@ const { Readable } = require('streamx')
 module.exports = async function build ({ dir }) {
     const output = new Readable({ objectMode: true })
     const host = platform + '-' + arch
-    const distributables = path.join(dir, 'distributables', host)
+    const distributables = path.join(dir, 'distributables')
     output.push({ tag: 'init', data: { distributables } })
 
     output.push({ tag: 'npm' })
