@@ -12,7 +12,7 @@ module.exports = async function build ({ dir }) {
     output.push({ tag: 'init', data: { distributables } })
 
     output.push({ tag: 'npm' })
-    const result = spawnSync('npm', ['i', 'cmake-pear', '--no-package-lock', '--no-save', '--prefix', '.'], { cwd: distributables, stdio: 'inherit' })
+    const result = spawnSync('npm', ['i', 'cmake-pear', '--no-package-lock', '--no-save', '--force', '--prefix', '.'], { cwd: distributables, stdio: 'inherit' })
     if (result.status !== 0) throw new Error(`npm error ${result.stderr?.toString()}`)
 
     output.push({ tag: 'generate' })
