@@ -14,9 +14,7 @@
   },
   "dependencies": {
     "bare-make": "^1.6.3",
-    "bare-path": "^3.0.0",
-    "streamx": "^2.23.0",
-    "which-runtime": "^1.3.2"
+    "streamx": "^2.23.0"
   },
   "devDependencies": {
     "b4a": "^1.7.3",
