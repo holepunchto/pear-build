@@ -7,6 +7,7 @@ const { isWindows } = require('which-runtime')
 const path = require('bare-path')
 const os = require('bare-os')
 const build = require('..')
+const fixtureDir = path.resolve(__dirname, 'fixtures', 'distributables')
 
 function pipeId (s) {
   const buf = b4a.allocUnsafe(32)
@@ -18,7 +19,7 @@ test('throws if not Pear', t => {
   t.exception(() => build({ link: 'pear://pear', dir: os.tmpdir() }))
 })
 
-test('build({ link, dir })', async t => {
+test('build({ dir })', async t => {
   t.plan(0)
   const kIPC = Symbol('test.ipc')
   const socketPath = isWindows
@@ -38,7 +39,9 @@ test('build({ link, dir })', async t => {
   }
   global.Pear = new API()
 
-  const link = 'pear://pear'
-  const dir = os.tmpdir()
-  const stream = build({ link, dir })
+  const dir = fixtureDir
+  const stream = build({ dir })
+  stream.on('data', (msg) => {
+    console.log('DATA === ', msg)
+  })
 })
