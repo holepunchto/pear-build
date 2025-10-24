@@ -17,10 +17,6 @@
     "streamx": "^2.23.0"
   },
   "devDependencies": {
-    "b4a": "^1.7.3",
-    "bare-os": "^3.6.2",
-    "brittle": "^3.19.0",
-    "pear-ipc": "^6.6.1",
-    "sodium-native": "^5.0.9"
+    "brittle": "^3.19.0"
   }
 }
