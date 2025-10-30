@@ -1,5 +1,6 @@
 'use strict'
 const make = require('bare-make')
+const path = require('bare-path')
 const { Readable } = require('streamx')
 
 module.exports = function build ({ dir }) {
@@ -15,7 +16,8 @@ async function _build (output, { dir }) {
     await make.generate({ cwd: dir })
     output.push({ tag: 'build' })
     await make.build({ cwd: dir })
-    output.push({ tag: 'complete', data: { dir } })
+    const buildDir = path.join(dir, 'build')
+    output.push({ tag: 'complete', data: { dir: buildDir } })
     output.push({ tag: 'final', data: { success: true } })
   } catch (err) {
     output.push({ tag: 'error', data: { message: err.message, stack: err.stack } })
