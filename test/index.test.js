@@ -5,7 +5,7 @@ const pearBuild = require('..')
 const fixtureDir = path.resolve(__dirname, 'fixtures', 'distributables')
 
 test('build({ dir })', async function ({ plan, alike, timeout }) {
-  timeout(1_800_000)
+  timeout(1_200_000)
   plan(4)
   const dir = fixtureDir
   const stream = pearBuild({ dir })
