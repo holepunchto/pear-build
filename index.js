@@ -13,11 +13,10 @@ async function _build (output, { dir }) {
   try {
     output.push({ tag: 'init', data: { dir } })
     output.push({ tag: 'generate' })
-    await make.generate({ cwd: dir })
+    await make.generate({ cwd: dir, stdio: 'inherit' })
     output.push({ tag: 'build' })
-    await make.build({ cwd: dir })
-    const buildDir = path.join(dir, 'build')
-    output.push({ tag: 'complete', data: { dir: buildDir } })
+    await make.build({ cwd: dir, stdio: 'inherit' })
+    output.push({ tag: 'complete', data: { dir: path.join(dir, 'build') } })
     output.push({ tag: 'final', data: { success: true } })
   } catch (err) {
     output.push({ tag: 'error', data: { message: err.message, stack: err.stack } })
