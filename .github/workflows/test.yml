@@ -44,7 +44,11 @@ jobs:
         if: ${{ matrix.platform == 'win32' }}
       - run: choco install nasm
         if: ${{ matrix.platform == 'win32' }}
-      - run: npm install -g bare-make
-      - run: npm install
-      - run: bare-make generate --platform ${{ matrix.platform }} --arch ${{ matrix.arch }} --debug
-      - run: bare-make build
+      - name: Setup bare
+        run: npm i -g bare-runtime
+      - name: Install dependencies
+        run: npm i
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: npm test
