@@ -31,6 +31,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+      - uses: GuillaumeFalourd/setup-windows10-sdk-action@v1
+        if: ${{ matrix.platform == 'win32' }}
       - run: |
           sudo apt update
           sudo apt install -y libgtk-4-dev libwebkitgtk-6.0-dev
