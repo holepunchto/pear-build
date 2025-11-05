@@ -19,7 +19,7 @@ add_pear_appling(
   MACOS_ENTITLEMENTS ""
   MACOS_ICON "icons/darwin/icon.png"
 
-  WINDOWS_SIGNING_SUBJECT ""
+  WINDOWS_SIGNING_SUBJECT "-"
   WINDOWS_SIGNING_THUMBPRINT ""
   WINDOWS_ICON "icons/win32/icon.png"
 
