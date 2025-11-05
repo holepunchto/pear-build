@@ -7,8 +7,7 @@ project(pear_appling C CXX ASM)
 add_pear_appling(
   pear_appling
   ID "keet"
-  NAME "Pear App"
-  LINK "pear://keet"
+  NAME "PearApp"
   VERSION "1.0.0"
   AUTHOR "Holepunch"
   DESCRIPTION "Pear Desktop Example"
