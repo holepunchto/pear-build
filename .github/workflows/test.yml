@@ -45,9 +45,6 @@ jobs:
         if: ${{ matrix.platform == 'win32' }}
       - run: choco install nasm
         if: ${{ matrix.platform == 'win32' }}
-      - run: '(Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\11\bin" -Recurse -Filter signtool.exe -ErrorAction SilentlyContinue | Where-Object { $_.FullName -match "\\x64\\signtool\.exe$" } | Select-Object -First 1 | Split-Path) >> $env:GITHUB_PATH'
-        if: ${{ matrix.platform == 'win32' }}
-        shell: pwsh
       - name: Setup bare
         run: npm i -g bare-runtime
       - name: Install dependencies
