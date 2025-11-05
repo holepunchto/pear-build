@@ -50,5 +50,6 @@ jobs:
         run: npm i
       - name: Lint
         run: npm run lint
+      - run: git config --system core.longpaths true
       - name: Test
         run: npm test
