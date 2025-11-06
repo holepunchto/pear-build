@@ -12,15 +12,7 @@ add_pear_appling(
   AUTHOR "Holepunch"
   DESCRIPTION "Pear Desktop Example"
   SPLASH "icons/splash.png"
-
-  MACOS_IDENTIFIER "com.pears.deskex"
-  MACOS_CATEGORY "public.app-category.developer-tools"
-  MACOS_SIGNING_IDENTITY "-"
-  MACOS_ENTITLEMENTS ""
   MACOS_ICON "icons/darwin/icon.png"
-
   WINDOWS_ICON "icons/win32/icon.png"
-
-  LINUX_CATEGORY "Development"
   LINUX_ICON "icons/linux/icon.png"
 )
