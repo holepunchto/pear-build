@@ -45,6 +45,9 @@ jobs:
         if: ${{ matrix.platform == 'win32' }}
       - run: choco install nasm
         if: ${{ matrix.platform == 'win32' }}
+      - uses: KamaranL/add-signtool-action@v1
+        if: ${{ matrix.platform == 'win32' }}
+        id: signtool
       - name: Setup bare
         run: npm i -g bare-runtime
       - name: Install dependencies
