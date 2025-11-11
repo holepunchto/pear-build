@@ -1,4 +1,4 @@
 coverage
 node_modules/
 build/
-!test/fixtures/distributables/node_modules/
+!test/fixtures/runtime/node_modules/

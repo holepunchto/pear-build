@@ -6,13 +6,15 @@ project(pear_appling C CXX ASM)
 
 add_pear_appling(
   pear_appling
-  ID "keet"
-  NAME "PearApp"
+  ID "runtime"
+  NAME "PearRuntime"
   VERSION "1.0.0"
   AUTHOR "Holepunch"
-  DESCRIPTION "Pear Desktop Example"
+  DESCRIPTION "Pear Runtime appling"
   SPLASH "icons/splash.png"
+  MACOS_SIGNING_IDENTITY "-"
   MACOS_ICON "icons/darwin/icon.png"
   WINDOWS_ICON "icons/win32/icon.png"
+  LINUX_CATEGORY "Development"
   LINUX_ICON "icons/linux/icon.png"
 )
