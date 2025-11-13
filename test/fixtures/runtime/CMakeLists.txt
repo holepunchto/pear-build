@@ -11,10 +11,13 @@ add_pear_appling(
   VERSION "1.0.0"
   AUTHOR "Holepunch"
   DESCRIPTION "Pear Runtime appling"
-  SPLASH "icons/splash.png"
+  SPLASH "distributables/icons/splash.png"
+
   MACOS_SIGNING_IDENTITY "-"
-  MACOS_ICON "icons/darwin/icon.png"
-  WINDOWS_ICON "icons/win32/icon.png"
+  MACOS_ICON "distributables/icons/darwin/icon.png"
+
+  WINDOWS_ICON "distributables/icons/win32/icon.png"
+
   LINUX_CATEGORY "Development"
-  LINUX_ICON "icons/linux/icon.png"
+  LINUX_ICON "distributables/icons/linux/icon.png"
 )
