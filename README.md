@@ -9,11 +9,9 @@ import build from 'pear-build'
 ```
 
 ```js
-function status(info) {
-  console.log(info)
-}
-const link = 'pear://....'
-const stream = build({ link, dir: os.cwd() })
+function status (info) { console.log(info) }
+const dir = os.cwd()
+const stream = build({ dir })
 stream.on('data', status)
 ```
 
