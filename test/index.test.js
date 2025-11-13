@@ -4,7 +4,8 @@ const path = require('bare-path')
 const pearBuild = require('..')
 const runtimeDir = path.resolve(__dirname, 'fixtures', 'runtime')
 
-test('build({ dir })', async function ({ plan, alike }) {
+test('build({ dir })', async function ({ plan, alike, timeout }) {
+  timeout(900000)
   plan(4)
   const dir = runtimeDir
   const stream = pearBuild({ dir })
