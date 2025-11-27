@@ -4,13 +4,13 @@ const path = require('bare-path')
 const { Readable } = require('streamx')
 const { arch, platform } = require('which-runtime')
 
-module.exports = function build ({ dotPear }) {
+module.exports = function build({ dotPear }) {
   const output = new Readable({ objectMode: true })
   _build(output, { dotPear })
   return output
 }
 
-async function _build (output, { dotPear }) {
+async function _build(output, { dotPear }) {
   try {
     const entry = path.join(dotPear, 'app.mjs')
     const icon = path.join(dotPear, platform, 'icon.png') || path.join(dotPear, 'icon.png')

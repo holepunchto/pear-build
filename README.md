@@ -9,7 +9,9 @@ import build from 'pear-build'
 ```
 
 ```js
-function status (info) { console.log(info) }
+function status(info) {
+  console.log(info)
+}
 const dotPear = path.join(cwd(), '.pear')
 const stream = build({ dotPear })
 stream.on('data', status)

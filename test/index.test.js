@@ -12,7 +12,7 @@ test('build({ dir })', async function ({ plan, alike, timeout }) {
   const stream = pearBuild({ dotPear })
   const outputs = []
   stream.on('data', (msg) => outputs.push(msg))
-  await new Promise(resolve => stream.on('data', m => m.tag === 'final' && resolve()))
+  await new Promise((resolve) => stream.on('data', (m) => m.tag === 'final' && resolve()))
   alike(outputs[0], { tag: 'init', data: { dotPear } }, 'init')
   // alike(outputs[1], { tag: 'build' }, 'build')
   // alike(outputs[2], { tag: 'complete', data: { dir: path.join(dir, 'build') } }, 'complete')
