@@ -1,11 +1,11 @@
 import appling from 'appling-native'
 
-export async function preflight(id) {
-  const lock = await appling.lock()
+export async function preflight(id, dir) {
+  const lock = await appling.lock(dir)
 
   let platform
   try {
-    platform = await appling.resolve()
+    platform = await appling.resolve(dir)
   } catch {
     return lock
   }

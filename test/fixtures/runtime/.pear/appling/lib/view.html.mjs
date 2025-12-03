@@ -98,7 +98,7 @@ export default html`
       align-items: center;
       flex-direction: column;
       justify-content: center;
-      padding: 0 4rem;
+      padding: 0 3.8rem;
       height: 100vh;
     }
 
@@ -187,7 +187,7 @@ export default html`
     }
 
     .message {
-      font-size: 0.813rem;
+      font-size: 0.8rem;
       width: 100%;
       text-align: left;
     }
@@ -201,7 +201,7 @@ export default html`
       justify-content: space-between;
       align-items: start;
       width: 100%;
-      gap: 1rem;
+      gap: 0.3rem;
       min-height: 1.5rem;
     }
 
@@ -213,10 +213,10 @@ export default html`
 
     .stats {
       font-variant-numeric: tabular-nums;
-      font-size: 0.813rem;
+      font-size: 0.8rem;
       display: flex;
       justify-content: flex-end;
-      gap: 0.5rem;
+      gap: 0.3rem;
       white-space: nowrap;
       margin: 0;
       margin-left: auto;
@@ -224,7 +224,7 @@ export default html`
 
     .status {
       width: 100%;
-      height: 129px;
+      height: 130px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -357,10 +357,11 @@ export default html`
       e.launchBtn.classList.add('hidden')
     }
 
-    function setProgress({ speed, peers, progress }) {
+    function setProgress({ speed, peers, progress, stage, bytes }) {
       // Update stats
-      if (speed || peers !== undefined) {
+      if (bytes || speed || peers !== undefined) {
         const parts = [
+          bytes && '<span class="bytes">' + bytes + '</span>',
           speed && '<span class="speed">' + speed + '</span>',
           peers !== undefined &&
             '<span class="peers">' + peers + ' ' + (peers === 1 ? 'peer' : 'peers') + '</span>'
@@ -379,7 +380,22 @@ export default html`
           elements.progress.classList.add('transitioning')
         }
 
+        if (progress === 0) {
+          elements.warning.textContent = 'Starting platform installation'
+          elements.warning.classList.remove('hidden', 'error')
+        }
+
         progressBar.style.width = progress + '%'
+      }
+
+      if (progress !== 0) {
+        if (stage === 0) {
+          elements.warning.textContent = 'Installing platform...'
+          elements.warning.classList.remove('hidden', 'error')
+        } else if (stage === 1) {
+          elements.warning.textContent = 'Platform ready, installing app...'
+          elements.warning.classList.remove('hidden', 'error')
+        }
       }
     }
 

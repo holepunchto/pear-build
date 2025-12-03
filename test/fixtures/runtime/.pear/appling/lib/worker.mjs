@@ -31,7 +31,7 @@ async function install() {
             if (u.downloadProgress === 1) {
               clearInterval(bootstrapInterval)
             }
-          }, 300)
+          }, 250)
         }
       })
       platform = await appling.resolve(config.dir)
@@ -39,7 +39,10 @@ async function install() {
     if (platformFound) {
       progress.stage(0, 1)
     }
-    await platform.preflight(config.link)
+    progress.update({ progress: 0, speed: '', peers: 0, bytes: 0 }, 1)
+    await platform.preflight(config.link, (u) => {
+      progress.update(format(u), 1) // stage = 1
+    })
     progress.complete()
     app.broadcast(encode({ type: 'complete' }))
   } catch (e) {
