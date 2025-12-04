@@ -1,14 +1,14 @@
-import Thread from 'bare-thread'
-import { App, Screen, Window, WebView } from 'fx-native'
-import appling from 'appling-native'
-import { encode, decode } from './utils'
-import { preflight } from './preflight'
-import html from './view.html'
+const Thread = require('bare-thread')
+const { App, Screen, Window, WebView } = require('fx-native')
+const appling = require('appling-native')
+const { encode, decode } = require('./utils')
+const { preflight } = require('./preflight')
+const html = require('./view.html')
 
 const WINDOW_HEIGHT = 548
 const WINDOW_WIDTH = 500
 
-export async function install(id, opts = {}) {
+async function install(id, opts = {}) {
   const { platform = 'pzcjqmpoo6szkoc4bpkw65ib9ctnrq7b6mneeinbhbheihaq6p6o' } = opts
 
   using lock = await preflight(id)
@@ -63,7 +63,7 @@ export async function install(id, opts = {}) {
 
   app
     .on('launch', () => {
-      new Thread(import.meta.resolve('./worker'))
+      new Thread(require.resolve('./worker'))
 
       const { width, height } = Screen.main().getBounds()
 
@@ -87,3 +87,5 @@ export async function install(id, opts = {}) {
     .on('message', onWorkerMessage)
     .run()
 }
+
+module.exports = { install }

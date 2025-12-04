@@ -1,7 +1,7 @@
-import prettyBytes from 'prettier-bytes'
-import { encode } from './utils'
+const prettyBytes = require('prettier-bytes')
+const { encode } = require('./utils')
 
-export class Progress {
+class Progress {
   constructor(app, stages = [1]) {
     this.app = app
     this.stages = stages // e.g. [0.5, 0.3, 0.2]
@@ -55,3 +55,5 @@ export class Progress {
     this._broadcast()
   }
 }
+
+module.exports = { Progress }

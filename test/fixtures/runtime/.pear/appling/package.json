@@ -1,8 +1,6 @@
 {
-  "name": "Runtime",
+  "name": "appling",
   "version": "1.0.0",
-  "description": "Pear Runtime",
-  "license": "Apache-2.0",
   "dependencies": {
     "appling-native": "^1.4.0",
     "bare-thread": "^1.1.3",

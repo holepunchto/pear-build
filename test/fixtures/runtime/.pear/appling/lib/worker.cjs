@@ -1,8 +1,8 @@
-import { App } from 'fx-native'
-import bootstrap from 'pear-updater-bootstrap'
-import appling from 'appling-native'
-import { encode, decode, format } from './utils'
-import { Progress } from './progress'
+const { App } = require('fx-native')
+const bootstrap = require('pear-updater-bootstrap')
+const appling = require('appling-native')
+const { encode, decode, format } = require('./utils')
+const { Progress } = require('./progress')
 
 const app = App.shared()
 

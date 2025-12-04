@@ -14,8 +14,9 @@ module.exports = function build({ dotPear }) {
 async function _build(output, { dotPear }) {
   try {
     const appling = path.join(dotPear, 'appling')
-    const entry = path.join(dotPear, 'appling', 'app.mjs')
+    const entry = path.join(dotPear, 'appling', 'app.cjs')
     const icon = path.join(dotPear, 'brand', 'icons', platform, 'icon.png')
+    const entitlements = path.join(appling, 'entitlements.plist')
     const host = platform + '-' + arch
     const target = path.join(dotPear, 'target', host)
     output.push({ tag: 'init', data: { dotPear } })
@@ -24,13 +25,12 @@ async function _build(output, { dotPear }) {
     for await (const resource of bareBuild(entry, {
       target: [host],
       icon,
-      identifier: 'com.example.App',
-      package: false,
+      entitlements,
       out: target
     })) {
       console.log(resource)
     }
-    output.push({ tag: 'complete', data: { target } })
+    output.push({ tag: 'complete' })
     output.push({ tag: 'final', data: { success: true } })
   } catch (err) {
     output.push({ tag: 'error', data: { message: err.message, stack: err.stack } })

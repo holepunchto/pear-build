@@ -1,6 +1,6 @@
-import appling from 'appling-native'
+const appling = require('appling-native')
 
-export async function preflight(id, dir) {
+async function preflight(id, dir) {
   const lock = await appling.lock(dir)
 
   let platform
@@ -18,3 +18,5 @@ export async function preflight(id, dir) {
 
   Bare.exit()
 }
+
+module.exports = { preflight }

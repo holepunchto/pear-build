@@ -1,16 +1,16 @@
-import splash from './images/splash.svg' with { type: 'text' }
-import pear from './images/pear.svg' with { type: 'text' }
+const splash = require('./images/splash.svg', { with: { type: 'text' } })
+const pear = require('./images/pear.svg', { with: { type: 'text' } })
 
-import inter400 from './fonts/inter/400.woff2' with { type: 'binary' }
-import inter500 from './fonts/inter/500.woff2' with { type: 'binary' }
-import inter600 from './fonts/inter/600.woff2' with { type: 'binary' }
+const inter400 = require('./fonts/inter/400.woff2', { with: { type: 'binary' } })
+const inter500 = require('./fonts/inter/500.woff2', { with: { type: 'binary' } })
+const inter600 = require('./fonts/inter/600.woff2', { with: { type: 'binary' } })
 
 const AUTO_LAUNCH = true
 const SLOW_TIMEOUT = 180000 // 3 minutes
 
 const html = String.raw
 
-export default html`
+module.exports = html`
   <style>
     @font-face {
       font-family: 'Inter';

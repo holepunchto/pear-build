@@ -1,14 +1,14 @@
-import prettyBytes from 'prettier-bytes'
+const prettyBytes = require('prettier-bytes')
 
-export function encode(msg) {
+function encode(msg) {
   return JSON.stringify(msg)
 }
 
-export function decode(msg) {
+function decode(msg) {
   return JSON.parse(msg.toString())
 }
 
-export function format(u) {
+function format(u) {
   if (u.drive?.core) {
     return {
       speed: prettyBytes(u.downloadSpeed()) + '/s',
@@ -25,3 +25,5 @@ export function format(u) {
     bytes: u.downloadedBytes
   }
 }
+
+module.exports = { encode, decode, format }
