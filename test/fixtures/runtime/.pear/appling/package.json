@@ -1,14 +1,7 @@
 {
-  "name": "appling",
+  "name": "Runtime",
   "version": "1.0.0",
-  "description": "",
-  "exports": {
-    "./package": "./package.json"
-  },
-  "files": [
-    "app.mjs",
-    "lib"
-  ],
+  "description": "Pear Runtime",
   "license": "Apache-2.0",
   "dependencies": {
     "appling-native": "^1.4.0",
