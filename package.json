@@ -14,15 +14,15 @@
     "test": "brittle-bare --coverage test/all.js"
   },
   "dependencies": {
-    "bare-build": "^0.2.2",
+    "bare-build": "^0.2.3",
     "bare-path": "^3.0.0",
     "bare-subprocess": "^5.2.1",
     "streamx": "^2.23.0",
     "which-runtime": "^1.3.2"
   },
   "devDependencies": {
-    "brittle": "^3.19.0",
-    "prettier": "^3.6.2",
+    "brittle": "^3.19.1",
+    "prettier": "^3.7.4",
     "prettier-config-holepunch": "^2.0.0"
   }
 }

@@ -1,17 +1,17 @@
 'use strict'
 const bareBuild = require('bare-build')
 const path = require('bare-path')
+const { spawnSync } = require('bare-subprocess')
 const { Readable } = require('streamx')
 const { arch, platform } = require('which-runtime')
-const { spawnSync } = require('bare-subprocess')
 
-module.exports = function build({ dotPear }) {
+module.exports = function build({ dotPear, manifest }) {
   const output = new Readable({ objectMode: true })
-  _build(output, { dotPear })
+  _build(output, { dotPear, manifest })
   return output
 }
 
-async function _build(output, { dotPear }) {
+async function _build(output, { dotPear, manifest }) {
   try {
     const appling = path.join(dotPear, 'appling')
     const entry = path.join(dotPear, 'appling', 'app.cjs')
@@ -23,6 +23,11 @@ async function _build(output, { dotPear }) {
     output.push({ tag: 'build' })
     spawnSync('npm', ['install'], { cwd: appling, stdio: 'inherit' })
     for await (const resource of bareBuild(entry, {
+      name: manifest.name,
+      version: manifest.version,
+      author: manifest.author,
+      description: manifest.description,
+      identifier: manifest.identifier,
       target: [host],
       icon,
       entitlements,
