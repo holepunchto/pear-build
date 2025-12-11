@@ -37,6 +37,19 @@ async function _build(output, { dotPear }) {
       out: target
     })) {
     }
+    console.log('Build completed:')
+    console.log({
+      name: manifest.name,
+      version: manifest.version,
+      author: manifest.author,
+      description: manifest.description,
+      identifier: manifest.identifier,
+      target: [host],
+      icon,
+      entitlements,
+      base: applingDir,
+      out: target
+    })
     output.push({ tag: 'complete' })
     output.push({ tag: 'final', data: { success: true } })
   } catch (err) {
