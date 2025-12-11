@@ -5,23 +5,25 @@ const { spawnSync } = require('bare-subprocess')
 const { Readable } = require('streamx')
 const { arch, platform } = require('which-runtime')
 
-module.exports = function build({ dotPear, manifest }) {
+module.exports = function build({ dotPear }) {
   const output = new Readable({ objectMode: true })
-  _build(output, { dotPear, manifest })
+  _build(output, { dotPear })
   return output
 }
 
-async function _build(output, { dotPear, manifest }) {
+async function _build(output, { dotPear }) {
   try {
-    const appling = path.join(dotPear, 'appling')
-    const entry = path.join(dotPear, 'appling', 'app.cjs')
+    output.push({ tag: 'init', data: { dotPear } })
+    const applingDir = path.join(dotPear, 'appling')
+    const entry = path.join(applingDir, 'app.cjs')
     const icon = path.join(dotPear, 'brand', 'icons', platform, 'icon.png')
-    const entitlements = path.join(appling, 'entitlements.plist')
+    const entitlements = path.join(applingDir, 'entitlements.plist')
+    const manifest = require(path.join(applingDir, 'package.json')).pear.build
     const host = platform + '-' + arch
     const target = path.join(dotPear, 'target', host)
-    output.push({ tag: 'init', data: { dotPear } })
+    
     output.push({ tag: 'build' })
-    spawnSync('npm', ['install'], { cwd: appling, stdio: 'inherit' })
+    spawnSync('npm', ['install'], { cwd: applingDir, stdio: 'inherit' })
     for await (const resource of bareBuild(entry, {
       name: manifest.name,
       version: manifest.version,

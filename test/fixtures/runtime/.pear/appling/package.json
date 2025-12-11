@@ -1,11 +1,22 @@
 {
-  "name": "appling",
+  "name": "runtime",
   "version": "1.0.0",
+  "license": "Apache-2.0",
   "dependencies": {
     "appling-native": "^1.4.0",
     "bare-thread": "^1.1.3",
     "fx-native": "^1.1.1",
+    "pear-aliases": "^1.0.6",
     "pear-updater-bootstrap": "^2.3.0",
     "prettier-bytes": "^1.0.4"
+  },
+  "pear": {
+    "build": {
+      "name": "Runtime",
+      "version": "1.0.0",
+      "author": "Holepunch",
+      "description": "Appling for pear://runtime",
+      "identifier": "com.pears.runtime"
+    }
   }
 }

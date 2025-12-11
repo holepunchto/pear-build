@@ -14,7 +14,7 @@
     "test": "brittle-bare --coverage test/all.js"
   },
   "dependencies": {
-    "bare-build": "^0.2.3",
+    "bare-build": "^0.2.4",
     "bare-path": "^3.0.0",
     "bare-subprocess": "^5.2.1",
     "streamx": "^2.23.0",

@@ -9,12 +9,7 @@ test('build({ dir })', async function ({ plan, alike, timeout }) {
   plan(3)
   const dir = runtimeDir
   const dotPear = path.join(dir, '.pear')
-  const manifest = {
-    name: 'Runtime',
-    version: '1.0.0',
-    identifier: 'pear.runtime'
-  }
-  const stream = pearBuild({ dotPear, manifest })
+  const stream = pearBuild({ dotPear })
   const outputs = []
   stream.on('data', (msg) => outputs.push(msg))
   await new Promise((resolve) => stream.on('data', (m) => m.tag === 'final' && resolve()))
