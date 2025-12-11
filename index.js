@@ -40,6 +40,7 @@ async function _build(output, { dotPear }) {
     output.push({ tag: 'complete' })
     output.push({ tag: 'final', data: { success: true } })
   } catch (err) {
+    const manifest = require(path.join(applingDir, 'package.json')).pear.build
     messageTemp = {
       name: manifest.name,
       version: manifest.version,
