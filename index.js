@@ -60,7 +60,7 @@ async function _build(output, { dotPear }) {
       out: target,
       entry
     }
-    output.push({ tag: 'error', data: { message: messageTemp, stack: err.stack } })
+    output.push({ tag: 'error', data: { message: messageTemp, stack: err } })
     output.push({ tag: 'final', data: { success: false, message: err.message } })
   } finally {
     output.push(null)
