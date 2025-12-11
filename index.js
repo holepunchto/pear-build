@@ -37,8 +37,10 @@ async function _build(output, { dotPear }) {
       out: target
     })) {
     }
-    console.log('Build completed:')
-    console.log({
+    output.push({ tag: 'complete' })
+    output.push({ tag: 'final', data: { success: true } })
+  } catch (err) {
+    messageTemp = {
       name: manifest.name,
       version: manifest.version,
       author: manifest.author,
@@ -49,11 +51,8 @@ async function _build(output, { dotPear }) {
       entitlements,
       base: applingDir,
       out: target
-    })
-    output.push({ tag: 'complete' })
-    output.push({ tag: 'final', data: { success: true } })
-  } catch (err) {
-    output.push({ tag: 'error', data: { message: err.message, stack: err.stack } })
+    }
+    output.push({ tag: 'error', data: { message: messageTemp, stack: err.stack } })
     output.push({ tag: 'final', data: { success: false, message: err.message } })
   } finally {
     output.push(null)
