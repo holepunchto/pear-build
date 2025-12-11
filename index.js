@@ -24,7 +24,7 @@ async function _build(output, { dotPear }) {
     
     output.push({ tag: 'build' })
     spawnSync('npm', ['install'], { cwd: applingDir, stdio: 'inherit' })
-    for await (const resource of bareBuild(entry, {
+    for await (const _ of bareBuild(entry, {
       name: manifest.name,
       version: manifest.version,
       author: manifest.author,
@@ -35,7 +35,6 @@ async function _build(output, { dotPear }) {
       entitlements,
       out: target
     })) {
-      console.log(resource)
     }
     output.push({ tag: 'complete' })
     output.push({ tag: 'final', data: { success: true } })
