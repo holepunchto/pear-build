@@ -6,7 +6,7 @@ const runtimeDir = path.resolve(__dirname, 'fixtures', 'runtime')
 
 test('build({ dotPear })', async function ({ plan, alike, timeout }) {
   timeout(180000)
-  // plan(3)
+  plan(3)
   const dotPear = path.join(runtimeDir, '.pear')
   const stream = build({ dotPear })
   const outputs = []
