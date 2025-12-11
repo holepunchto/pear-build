@@ -40,27 +40,7 @@ async function _build(output, { dotPear }) {
     output.push({ tag: 'complete' })
     output.push({ tag: 'final', data: { success: true } })
   } catch (err) {
-    const applingDir = path.join(dotPear, 'appling')
-    const entry = path.join(applingDir, 'app.cjs')
-    const icon = path.join(dotPear, 'brand', 'icons', platform, 'icon.png')
-    const entitlements = path.join(applingDir, 'entitlements.plist')
-    const manifest = require(path.join(applingDir, 'package.json')).pear.build
-    const host = platform + '-' + arch
-    const target = path.join(dotPear, 'target', host)
-    const messageTemp = {
-      name: manifest.name,
-      version: manifest.version,
-      author: manifest.author,
-      description: manifest.description,
-      identifier: manifest.identifier,
-      target: [host],
-      icon,
-      entitlements,
-      base: applingDir,
-      out: target,
-      entry
-    }
-    output.push({ tag: 'error', data: { message: messageTemp, stack: err } })
+    output.push({ tag: 'error', data: { message: err.message, stack: err.stack } })
     output.push({ tag: 'final', data: { success: false, message: err.message } })
   } finally {
     output.push(null)
