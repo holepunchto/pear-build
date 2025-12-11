@@ -47,7 +47,7 @@ async function _build(output, { dotPear }) {
     const manifest = require(path.join(applingDir, 'package.json')).pear.build
     const host = platform + '-' + arch
     const target = path.join(dotPear, 'target', host)
-    messageTemp = {
+    const messageTemp = {
       name: manifest.name,
       version: manifest.version,
       author: manifest.author,
