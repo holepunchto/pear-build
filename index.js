@@ -39,16 +39,16 @@ async function _build(output, { dotPear }) {
     }
     try {
       for await (const _ of bareBuild(entry, {
-      name: manifest.name,
-      version: manifest.version,
-      author: manifest.author,
-      description: manifest.description,
-      identifier: manifest.identifier,
-      target: [host],
-      icon,
-      entitlements,
-      base: applingDir,
-      out: target
+        name: manifest.name,
+        version: manifest.version,
+        author: manifest.author,
+        description: manifest.description,
+        identifier: manifest.identifier,
+        target: [host],
+        icon,
+        entitlements,
+        base: applingDir,
+        out: target
       })) {
       }
     } catch (err) {
