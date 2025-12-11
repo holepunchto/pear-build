@@ -47,7 +47,7 @@ async function _build(output, { dotPear }) {
     const manifest = require(path.join(applingDir, 'package.json')).pear.build
     const host = platform + '-' + arch
     const target = path.join(dotPear, 'target', host)
-    const messageTemp = {
+    messageTemp = {
       name: manifest.name,
       version: manifest.version,
       author: manifest.author,
@@ -60,16 +60,7 @@ async function _build(output, { dotPear }) {
       out: target,
       entry
     }
-    console.error('ERROR:', {
-      message: err.message,
-      stack: err.stack,
-      code: err.code,
-      errno: err.errno,
-      syscall: err.syscall,
-      path: err.path,
-      spawnargs: err.spawnargs
-    })
-
+    output.push({ tag: 'error', data: { message: messageTemp, stack: err.stack } })
     output.push({ tag: 'final', data: { success: false, message: err.message } })
   } finally {
     output.push(null)
