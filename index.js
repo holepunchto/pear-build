@@ -33,6 +33,7 @@ async function _build(output, { dotPear }) {
       target: [host],
       icon,
       entitlements,
+      base: applingDir,
       out: target
     })) {
     }
