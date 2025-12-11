@@ -18,13 +18,27 @@ async function _build(output, { dotPear }) {
     const entry = path.join(applingDir, 'app.cjs')
     const icon = path.join(dotPear, 'brand', 'icons', platform, 'icon.png')
     const entitlements = path.join(applingDir, 'entitlements.plist')
-    const manifest = require(path.join(applingDir, 'package.json')).pear.build
+    let manifest
+    try {
+      manifest = require(path.join(applingDir, 'package.json')).pear.build
+    } catch (err) {
+      output.push({ tag: 'error', data: { message: 'manifest failed' } })
+      output.push(null)
+      return
+    }
     const host = platform + '-' + arch
     const target = path.join(dotPear, 'target', host)
 
     output.push({ tag: 'build' })
-    spawnSync('npm', ['install'], { cwd: applingDir, stdio: 'inherit' })
-    for await (const _ of bareBuild(entry, {
+    try {
+      spawnSync('npm', ['install'], { cwd: applingDir, stdio: 'inherit' })
+    } catch (err) {
+      output.push({ tag: 'error', data: { message: 'npm install failed', error: err.message } })
+      output.push(null)
+      return
+    }
+    try {
+      for await (const _ of bareBuild(entry, {
       name: manifest.name,
       version: manifest.version,
       author: manifest.author,
@@ -35,7 +49,12 @@ async function _build(output, { dotPear }) {
       entitlements,
       base: applingDir,
       out: target
-    })) {
+      })) {
+      }
+    } catch (err) {
+      output.push({ tag: 'error', data: { message: 'bareBuild failed', error: err.message } })
+      output.push(null)
+      return
     }
     output.push({ tag: 'complete' })
     output.push({ tag: 'final', data: { success: true } })
