@@ -109,6 +109,10 @@ module.exports = html`
       text-align: center;
     }
 
+    header svg {
+      max-width: 120px;
+    }
+
     article {
       display: flex;
       flex-direction: column;
