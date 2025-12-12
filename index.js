@@ -22,7 +22,7 @@ async function _build(output, { dotPear }) {
     const host = platform + '-' + arch
     const target = path.join(dotPear, 'target', host)
 
-    output.push({ tag: 'build' })
+    output.push({ tag: 'build', data: { target } })
     spawnSync('npm', ['install'], { cwd: applingDir, stdio: 'inherit' })
     for await (const _ of bareBuild(entry, {
       name: manifest.name,
