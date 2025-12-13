@@ -16,7 +16,22 @@
       "version": "1.0.0",
       "author": "Holepunch",
       "description": "Appling for pear://runtime",
-      "identifier": "com.pears.runtime"
+      "identifier": "com.pears.runtime",
+      "darwin": {
+        "standalone": false,
+        "package": false,
+        "sign": false
+      },
+      "win32": {
+        "standalone": false,
+        "package": false,
+        "sign": false
+      },
+      "linux": {
+        "standalone": false,
+        "package": false,
+        "sign": false
+      }
     }
   }
 }
