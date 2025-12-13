@@ -24,12 +24,12 @@
       },
       "win32": {
         "standalone": false,
-        "package": true,
+        "package": false,
         "sign": false
       },
       "linux": {
         "standalone": false,
-        "package": true,
+        "package": false,
         "sign": false
       }
     }
