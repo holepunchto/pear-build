@@ -1,6 +1,6 @@
 {
   "name": "pear-build",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "index.js",
   "type": "commonjs",
   "description": "Build appling for a Pear application",
