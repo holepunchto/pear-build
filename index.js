@@ -23,7 +23,8 @@ async function _build(output, { dotPear }) {
     const target = path.join(dotPear, 'target', host)
 
     output.push({ tag: 'build', data: { target } })
-    spawnSync('npm', ['install'], { cwd: applingDir, stdio: 'inherit' })
+    const npm = platform === 'win32' ? 'npm.cmd' : 'npm'
+    spawnSync(npm, ['install'], { cwd: applingDir, stdio: 'inherit' })
     for await (const _ of bareBuild(entry, {
       name: manifest.name,
       version: manifest.version,
@@ -37,6 +38,7 @@ async function _build(output, { dotPear }) {
       out: target
     })) {
     }
+
     output.push({ tag: 'complete' })
     output.push({ tag: 'final', data: { success: true } })
   } catch (err) {
