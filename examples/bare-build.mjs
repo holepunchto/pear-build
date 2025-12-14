@@ -1,4 +1,4 @@
-import build from 'bare-build'
+import bareBuild from 'bare-build'
 import path from 'bare-path'
 import { arch, platform } from 'which-runtime'
 
@@ -8,6 +8,6 @@ const opts = {
   package: true,
   out: '.'
 }
-for await (const resource of build(entry, opts)) {
+for await (const resource of bareBuild(entry, opts)) {
   console.log(resource)
 }
