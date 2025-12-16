@@ -18,17 +18,17 @@
       "description": "Appling for pear://runtime",
       "identifier": "com.pears.runtime",
       "darwin": {
-        "standalone": false,
-        "package": false,
+        "standalone": true,
+        "package": true,
         "sign": false
       },
       "win32": {
-        "standalone": false,
+        "standalone": true,
         "package": true,
         "sign": false
       },
       "linux": {
-        "standalone": false,
+        "standalone": true,
         "package": true,
         "sign": false
       }
