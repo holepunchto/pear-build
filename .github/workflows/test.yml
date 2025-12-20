@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - if: matrix.os == 'windows-latest'
+        uses: microsoft/setup-msbuild@v1
+
       - name: Setup bare
         run: npm i -g bare-runtime
 
