@@ -36,9 +36,9 @@ async function _build(output, { dotPear }) {
       entitlements,
       base: applingDir,
       out: target,
-      standalone: manifest[platform].standalone,
-      package: manifest[platform].package,
-      sign: manifest[platform].sign
+      standalone: true,
+      package: false,
+      sign: false
     })) {
     }
 

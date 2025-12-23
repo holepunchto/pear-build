@@ -9,7 +9,7 @@ const opts = {
   name: 'Runtime',
   target: [`${platform}-${arch}`],
   package: false,
-  standalone: false,
+  standalone: true,
   base,
   out: '.'
 }
