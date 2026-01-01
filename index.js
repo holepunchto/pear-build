@@ -36,7 +36,7 @@ async function _build(output, { dotPear }) {
       entitlements,
       base: applingDir,
       out: target,
-      standalone: true,
+      standalone: false,
       package: false,
       sign: false
     })) {
