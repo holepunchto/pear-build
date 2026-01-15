@@ -14,7 +14,7 @@ const opts = {
   out: '.'
 }
 const npm = platform === 'win32' ? 'npm.cmd' : 'npm'
-spawnSync(npm, ['install'], { cwd: applingDir, stdio: 'inherit' })
+spawnSync(npm, ['install'], { cwd: base, stdio: 'inherit' })
 for await (const resource of bareBuild(entry, opts)) {
   console.log(resource)
 }
