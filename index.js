@@ -31,7 +31,7 @@ async function _build(output, { dotPear }) {
       author: manifest.author,
       description: manifest.description,
       identifier: manifest.identifier,
-      target: [host],
+      hosts: [host],
       icon,
       entitlements,
       base: applingDir,
