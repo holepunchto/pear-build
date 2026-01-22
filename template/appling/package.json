@@ -1,0 +1,17 @@
+{
+  "name": "appling",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "pear-installer": "github:holepunchto/pear-installer#pear-build"
+  },
+  "pear": {
+    "build": {
+      "name": "__name__",
+      "version": "__version__",
+      "author": "__author__",
+      "description": "__description__",
+      "identifier": "__identifier__"
+    }
+  }
+}
