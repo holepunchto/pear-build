@@ -1,3 +1,3 @@
-const { install } = require('./lib/install')
+const installer = require('pear-installer')
 
-install('runtime')
+installer('runtime')
