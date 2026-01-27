@@ -10,5 +10,6 @@
     <true/>
     <key>com.apple.security.cs.allow-dyld-environment-variables</key>
     <true/>
+    __entitlements__
 </dict>
 </plist>

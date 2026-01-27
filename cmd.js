@@ -43,12 +43,13 @@ module.exports = (ipc) => {
       if (fs.existsSync(dotPear) === false) {
         await fs.promises.mkdir(dotPear, { recursive: true })
         const defaults = {
-          id: z32,
+          id: `${pkgPear.build?.id || pkgPear.id || z32}`,
           name: `${pkgPear.build?.name || pkgPear.name || manifest.name}`,
           version: `${pkgPear.build?.version || pkgPear.version || manifest.version}`,
           author: `${pkgPear.build?.author || pkgPear.author || manifest.author}`,
           description: `${pkgPear.build?.description || pkgPear.description || manifest.description}`,
-          identifier: `${pkgPear.build?.identifier || `pear.${z32}`}`
+          identifier: `${pkgPear.build?.identifier || `pear.${z32}`}`,
+          entitlements: `${pkgPear.build?.entitlements || pkgPear.entitlements || ''}`
         }
         const template = path.join(__dirname, 'template')
         await opwait(
