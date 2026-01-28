@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "Apache-2.0",
   "dependencies": {
-    "pear-installer": "github:holepunchto/pear-installer#pear-build"
+    "pear-installer": "github:holepunchto/pear-installer"
   },
   "pear": {
     "build": {
