@@ -1,0 +1,17 @@
+{
+  "name": "appling",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "pear-installer": "github:holepunchto/pear-installer#pear-build"
+  },
+  "pear": {
+    "build": {
+      "name": "Runtime",
+      "version": "1.0.0",
+      "author": "Holepunch",
+      "description": "Appling for pear://runtime",
+      "identifier": "com.pears.runtime"
+    }
+  }
+}
