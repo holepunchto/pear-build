@@ -6,7 +6,7 @@
   "description": "Build appling for a Pear application",
   "author": "Holepunch Inc",
   "license": "Apache-2.0",
-  "files": [],
+  "files": ["cmd.js"],
   "scripts": {
     "format": "prettier --write .",
     "lint": "prettier --check .",
