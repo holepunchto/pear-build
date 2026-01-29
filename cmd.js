@@ -26,23 +26,17 @@ const program = command(
     const { json } = cmd.flags
     const link = cmd.args.link
     const { dir = cwd } = cmd.args
-
     const ipc = global.Pear?.[global.Pear?.constructor?.IPC]
     if (!ipc) throw new Error('IPC not available')
-
     const cmdArgs = cmd.argv
-
     try {
       const { drive } = plink.parse(link)
       const z32 = hypercoreid.encode(drive.key)
-
       const { manifest } = await opwait(ipc.info({ link, manifest: true }))
       const pkgPear = manifest?.pear
-
       const dotPear = path.join(dir, '.pear')
       if (fs.existsSync(dotPear) === false) {
         await opwait(ipc.dump({ link, dir, only: '.pear', force: true }))
-
         if (fs.existsSync(dotPear) === false) {
           await fsp.mkdir(dotPear, { recursive: true })
 
@@ -57,7 +51,6 @@ const program = command(
           }
 
           const template = path.join(path.dirname(new URL(import.meta.url).pathname), 'template')
-
           await output(
             false,
             init(template, {
@@ -75,7 +68,6 @@ const program = command(
           )
         }
       }
-
       await output(json, pearBuild({ dotPear }))
     } finally {
       pipe()?.end()
