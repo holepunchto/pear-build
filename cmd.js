@@ -1,13 +1,16 @@
-'use strict'
-const os = require('bare-os')
-const fs = require('bare-fs')
-const path = require('bare-path')
-const pearBuild = require('./index.js')
-const plink = require('pear-link')
-const opwait = require('pear-opwait')
-const hypercoreid = require('hypercore-id-encoding')
-const init = require('pear-init')
-const { outputter, ansi } = require('pear-terminal')
+import os from 'bare-os'
+import fs from 'bare-fs'
+import fsp from 'bare-fs/promises'
+import path from 'bare-path'
+import { ansi, outputter, explain } from 'pear-terminal'
+import { command, bail } from 'paparam'
+import init from 'pear-init'
+import pipe from 'pear-pipe'
+import plink from 'pear-link'
+import opwait from 'pear-opwait'
+import hypercoreid from 'hypercore-id-encoding'
+import pearBuild from './index.js'
+import { pear } from './package.json' with { type: 'json' }
 
 const output = outputter('build', {
   build: ({ target }) => `\nBuilding target... ${ansi.dim(target)}`,
@@ -15,57 +18,70 @@ const output = outputter('build', {
   error: ({ message }) => `Error: ${message}\n`
 })
 
-module.exports = (ipc) => {
-  const kIPC = global.Pear?.constructor?.IPC || Symbol('ipc')
-  if (global.Pear) {
-    if (!global.Pear.constructor?.IPC) global.Pear.constructor.IPC = kIPC
-    global.Pear[kIPC] = ipc
-  } else {
-    class API {
-      static IPC = kIPC
-      get [kIPC]() {
-        return ipc
-      }
-    }
-    global.Pear = new API()
-  }
-  return async function build(cmd) {
+const program = command(
+  'build',
+  pear.platform.command,
+  async function (cmd) {
+    const cwd = os.cwd()
     const { json } = cmd.flags
     const link = cmd.args.link
-    const { drive } = plink.parse(link)
-    const z32 = hypercoreid.encode(drive.key)
-    const { manifest } = await opwait(ipc.info({ link, manifest: true }))
-    const pkgPear = manifest?.pear
-    const { dir = os.cwd() } = cmd.args
-    const dotPear = path.join(dir, '.pear')
-    if (fs.existsSync(dotPear) === false) {
-      await opwait(ipc.dump({ link, dir, only: '.pear', force: true }))
+    const { dir = cwd } = cmd.args
+
+    const ipc = global.Pear?.[global.Pear?.constructor?.IPC]
+    if (!ipc) throw new Error('IPC not available')
+
+    const cmdArgs = cmd.argv
+
+    try {
+      const { drive } = plink.parse(link)
+      const z32 = hypercoreid.encode(drive.key)
+
+      const { manifest } = await opwait(ipc.info({ link, manifest: true }))
+      const pkgPear = manifest?.pear
+
+      const dotPear = path.join(dir, '.pear')
       if (fs.existsSync(dotPear) === false) {
-        await fs.promises.mkdir(dotPear, { recursive: true })
-        const defaults = {
-          id: `${pkgPear.build?.id || pkgPear.id || z32}`,
-          name: `${pkgPear.build?.name || pkgPear.name || manifest.name}`,
-          version: `${pkgPear.build?.version || pkgPear.version || manifest.version}`,
-          author: `${pkgPear.build?.author || pkgPear.author || manifest.author}`,
-          description: `${pkgPear.build?.description || pkgPear.description || manifest.description}`,
-          identifier: `${pkgPear.build?.identifier || `pear.${z32}`}`,
-          entitlements: `${pkgPear.build?.entitlements || pkgPear.entitlements || ''}`
+        await opwait(ipc.dump({ link, dir, only: '.pear', force: true }))
+
+        if (fs.existsSync(dotPear) === false) {
+          await fsp.mkdir(dotPear, { recursive: true })
+
+          const defaults = {
+            id: `${pkgPear.build?.id || pkgPear.id || z32}`,
+            name: `${pkgPear.build?.name || pkgPear.name || manifest.name}`,
+            version: `${pkgPear.build?.version || pkgPear.version || manifest.version}`,
+            author: `${pkgPear.build?.author || pkgPear.author || manifest.author}`,
+            description: `${pkgPear.build?.description || pkgPear.description || manifest.description}`,
+            identifier: `${pkgPear.build?.identifier || `pear.${z32}`}`,
+            entitlements: `${pkgPear.build?.entitlements || pkgPear.entitlements || ''}`
+          }
+
+          const template = path.join(path.dirname(new URL(import.meta.url).pathname), 'template')
+
+          await output(
+            false,
+            init(template, {
+              dir: dotPear,
+              cwd,
+              force: true,
+              defaults,
+              autosubmit: true,
+              ask: false,
+              header: 'dot-pear',
+              pkg: manifest,
+              cmdArgs
+            }),
+            { paths: [] }
+          )
         }
-        const template = path.join(__dirname, 'template')
-        await opwait(
-          init(template, {
-            dir: dotPear,
-            cwd: os.cwd(),
-            force: true,
-            defaults,
-            autosubmit: true,
-            ask: false,
-            header: 'dot-pear',
-            pkg: manifest
-          })
-        )
       }
+
+      await output(json, pearBuild({ dotPear }))
+    } finally {
+      pipe()?.end()
     }
-    await output(json, pearBuild({ dotPear }))
-  }
-}
+  },
+  bail(explain)
+)
+
+program.parse(Pear.app.args)

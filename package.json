@@ -2,7 +2,7 @@
   "name": "pear-build",
   "version": "0.1.0",
   "main": "index.js",
-  "type": "commonjs",
+  "type": "module",
   "description": "Build appling for a Pear application",
   "author": "Holepunch Inc",
   "license": "Apache-2.0",
@@ -15,13 +15,22 @@
     "test:gen": "brittle -r test/all.js test/*.test.js",
     "test": "brittle-bare --coverage test/all.js"
   },
-  "platform": {
-    "command": {
-      "summary": "Build appling for a Pear application",
-      "description": "Specify link to build a project.",
-      "arg <link>": "Pear link to build",
-      "arg [dir]": "Output directory path (default: .)",
-      "flag --json": "Newline delimited JSON output"
+  "pear": {
+    "name": "pear-build",
+    "stage": {
+      "ignore": [
+        "**/node_modules",
+        "!/node_modules"
+      ]
+    },
+    "platform": {
+      "command": {
+        "summary": "Build appling for a Pear application",
+        "description": "Specify link to build a project.",
+        "arg <link>": "Pear link to build",
+        "arg [dir]": "Output directory path (default: .)",
+        "flag --json": "Newline delimited JSON output"
+      }
     }
   },
   "dependencies": {
