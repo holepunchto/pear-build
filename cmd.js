@@ -1,16 +1,17 @@
-import os from 'bare-os'
-import fs from 'bare-fs'
-import fsp from 'bare-fs/promises'
-import path from 'bare-path'
-import { ansi, outputter, explain } from 'pear-terminal'
-import { command, bail } from 'paparam'
-import init from 'pear-init'
-import pipe from 'pear-pipe'
-import plink from 'pear-link'
-import opwait from 'pear-opwait'
-import hypercoreid from 'hypercore-id-encoding'
-import pearBuild from './index.js'
-import { pear } from './package.json' with { type: 'json' }
+const os = require('bare-os')
+const fs = require('bare-fs')
+const fsp = require('bare-fs/promises')
+const path = require('bare-path')
+const { ansi, outputter, explain } = require('pear-terminal')
+const { command, bail } = require('paparam')
+const init = require('pear-init')
+const pipe = require('pear-pipe')
+const plink = require('pear-link')
+const info = require('pear-info')
+const opwait = require('pear-opwait')
+const hypercoreid = require('hypercore-id-encoding')
+const build = require('./index.js')
+const { pear } = require('./package.json')
 
 const output = outputter('build', {
   build: ({ target }) => `\nBuilding target... ${ansi.dim(target)}`,
@@ -29,12 +30,15 @@ const program = command(
     const ipc = global.Pear?.[global.Pear?.constructor?.IPC]
     if (!ipc) throw new Error('IPC not available')
     const cmdArgs = cmd.argv
+
     try {
       const { drive } = plink.parse(link)
       const z32 = hypercoreid.encode(drive.key)
-      const { manifest } = await opwait(ipc.info({ link, manifest: true }))
+      const { manifest } = await opwait(info(link, { manifest: true }))
       const pkgPear = manifest?.pear
+
       const dotPear = path.join(dir, '.pear')
+
       if (fs.existsSync(dotPear) === false) {
         await opwait(ipc.dump({ link, dir, only: '.pear', force: true }))
         if (fs.existsSync(dotPear) === false) {
@@ -50,7 +54,7 @@ const program = command(
             entitlements: `${pkgPear.build?.entitlements || pkgPear.entitlements || ''}`
           }
 
-          const template = path.join(path.dirname(new URL(import.meta.url).pathname), 'template')
+          const template = path.join(__dirname, 'template')
           await output(
             false,
             init(template, {
@@ -68,7 +72,7 @@ const program = command(
           )
         }
       }
-      await output(json, pearBuild({ dotPear }))
+      await output(json, build({ dotPear }))
     } finally {
       pipe()?.end()
     }
