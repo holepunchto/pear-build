@@ -42,7 +42,7 @@
     "bare-subprocess": "^5.2.2",
     "hypercore-id-encoding": "^1.3.0",
     "pear-info": "^1.0.0",
-    "pear-init": "github:AndreiRegiani/pear-init#is-text-file",
+    "pear-init": "^1.0.1",
     "pear-link": "^4.2.1",
     "pear-opwait": "^1.0.0",
     "pear-pipe": "^1.0.6",
