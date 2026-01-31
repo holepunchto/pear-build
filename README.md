@@ -2,6 +2,10 @@
 
 > Build appling for a Pear application
 
+```
+npm install pear-build
+```
+
 ## Usage
 
 ```js
