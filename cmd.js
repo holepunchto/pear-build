@@ -27,7 +27,7 @@ const program = command(
     const cwd = os.cwd()
     const { json } = cmd.flags
     const link = cmd.args.link
-    const { dir = cwd } = cmd.args
+    const dir = cmd.args.dir ? resolve(cwd, cmd.args.dir) : cwd
     const cmdArgs = cmd.argv
 
     try {
