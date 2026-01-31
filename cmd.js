@@ -8,6 +8,7 @@ const init = require('pear-init')
 const pipe = require('pear-pipe')
 const plink = require('pear-link')
 const info = require('pear-info')
+const dump = require('pear-dump')
 const opwait = require('pear-opwait')
 const hypercoreid = require('hypercore-id-encoding')
 const build = require('./index.js')
@@ -27,8 +28,6 @@ const program = command(
     const { json } = cmd.flags
     const link = cmd.args.link
     const { dir = cwd } = cmd.args
-    const ipc = global.Pear?.[global.Pear?.constructor?.IPC]
-    if (!ipc) throw new Error('IPC not available')
     const cmdArgs = cmd.argv
 
     try {
@@ -36,11 +35,10 @@ const program = command(
       const z32 = hypercoreid.encode(drive.key)
       const { manifest } = await opwait(info(link, { manifest: true }))
       const pkgPear = manifest?.pear
-
       const dotPear = path.join(dir, '.pear')
 
       if (fs.existsSync(dotPear) === false) {
-        await opwait(ipc.dump({ link, dir, only: '.pear', force: true }))
+        await opwait(dump({ link, dir, only: '.pear', force: true }))
         if (fs.existsSync(dotPear) === false) {
           await fsp.mkdir(dotPear, { recursive: true })
 
