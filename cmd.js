@@ -48,8 +48,8 @@ const program = command(
       const pkgPear = manifest?.pear
       const dotPear = path.resolve(dir, '.pear')
 
-      // no local .pear
-      if (fs.existsSync(dotPear) === false) {
+      // no local .pear is present
+      if (fs.existsSync(path.join(dotPear, '_template.json')) === false) {
         // use staged .pear if present
         await opwait(dump(link, { dir, only: '.pear', force: true }))
         // if nothing is present, generate .pear from template
