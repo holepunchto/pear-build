@@ -14,10 +14,22 @@ const hypercoreid = require('hypercore-id-encoding')
 const build = require('./index.js')
 const { pear } = require('./package.json')
 
-const output = outputter('build', {
+const buildOutput = outputter('build', {
   build: ({ target }) => `\nBuilding target... ${ansi.dim(target)}`,
   complete: () => 'Completed!',
   error: ({ message }) => `Error: ${message}\n`
+})
+
+const initOutput = outputter('init', {
+  writing: () => '',
+  wrote: ({ path }, info) => {
+    info.paths.push(path)
+  },
+  written: (_, info) => {
+    let written = ''
+    for (const path of info.paths) written += '* ' + path + '\n'
+    return written
+  }
 })
 
 const program = command(
@@ -27,21 +39,22 @@ const program = command(
     const cwd = os.cwd()
     const { json } = cmd.flags
     const link = cmd.args.link
-    const dir = cmd.args.dir ? resolve(cwd, cmd.args.dir) : cwd
-    const cmdArgs = cmd.argv
+    const { dir = os.cwd() } = cmd.args
 
     try {
       const { drive } = plink.parse(link)
       const z32 = hypercoreid.encode(drive.key)
       const { manifest } = await opwait(info(link, { manifest: true }))
       const pkgPear = manifest?.pear
-      const dotPear = path.join(dir, '.pear')
+      const dotPear = path.resolve(dir, '.pear')
 
+      // no local .pear
       if (fs.existsSync(dotPear) === false) {
-        await opwait(dump({ link, dir, only: '.pear', force: true }))
+        // use staged .pear if present
+        await opwait(dump(link, { dir, only: '.pear', force: true }))
+        // if nothing is present, generate .pear from template
         if (fs.existsSync(dotPear) === false) {
           await fsp.mkdir(dotPear, { recursive: true })
-
           const defaults = {
             id: `${pkgPear.build?.id || pkgPear.id || z32}`,
             name: `${pkgPear.build?.name || pkgPear.name || manifest.name}`,
@@ -51,11 +64,9 @@ const program = command(
             identifier: `${pkgPear.build?.identifier || `pear.${z32}`}`,
             entitlements: `${pkgPear.build?.entitlements || pkgPear.entitlements || ''}`
           }
-
-          const template = path.join(__dirname, 'template')
-          await output(
+          await initOutput(
             false,
-            init(template, {
+            init('pear://build/template', {
               dir: dotPear,
               cwd,
               force: true,
@@ -63,14 +74,13 @@ const program = command(
               autosubmit: true,
               ask: false,
               header: 'dot-pear',
-              pkg: manifest,
-              cmdArgs
+              pkg: manifest
             }),
             { paths: [] }
           )
         }
       }
-      await output(json, build({ dotPear }))
+      await buildOutput(json, build({ dotPear }))
     } finally {
       pipe()?.end()
     }
