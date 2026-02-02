@@ -66,7 +66,7 @@ const program = command(
           }
           await initOutput(
             false,
-            init('template', {
+            init('./template', {
               dir: dotPear,
               cwd,
               force: true,
