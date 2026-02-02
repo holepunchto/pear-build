@@ -4,6 +4,7 @@ const path = require('bare-path')
 const { spawnSync } = require('bare-subprocess')
 const Opstream = require('pear-opstream')
 const { arch, platform } = require('which-runtime')
+const { readFile } = require('bare-fs/promises')
 
 class Build extends Opstream {
   constructor(...args) {
@@ -17,7 +18,7 @@ class Build extends Opstream {
     const iconFile = platform === 'darwin' ? 'icon.icns' : 'icon.png'
     const iconPath = path.join(dotPear, 'brand', 'icons', platform, iconFile)
     const entitlements = path.join(applingDir, 'entitlements.plist')
-    const manifest = require(path.join(applingDir, 'package.json')).pear.build
+    const manifest = JSON.parse(await readFile(path.join(applingDir, 'package.json'))).pear.build
     const host = platform + '-' + arch
     const target = path.join(dotPear, 'target', host)
 
@@ -40,7 +41,6 @@ class Build extends Opstream {
       sign: false
     })) {
     }
-
     this.push({ tag: 'complete' })
   }
 }
