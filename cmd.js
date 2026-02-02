@@ -48,12 +48,13 @@ const program = command(
       const pkgPear = manifest?.pear
       const dotPear = path.resolve(dir, '.pear')
 
-      // no local .pear is present
-      if (fs.existsSync(path.join(dotPear, '_template.json')) === false) {
-        // use staged .pear if present
+      // .pear must exist before building
+      if (fs.existsSync(path.join(dotPear, 'appling')) === false) {
+        // first try to sync staged .pear
         await opwait(dump(link, { dir, only: '.pear', force: true }))
-        // if nothing is present, generate .pear from template
-        if (fs.existsSync(dotPear) === false) {
+
+        // if not staged, then generate .pear from template
+        if (fs.existsSync(path.join(dotPear, 'appling')) === false) {
           await fsp.mkdir(dotPear, { recursive: true })
           const defaults = {
             id: `${pkgPear.build?.id || pkgPear.id || z32}`,
