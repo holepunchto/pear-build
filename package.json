@@ -42,10 +42,10 @@
     "pear-info": "^1.0.0",
     "pear-init": "^1.0.1",
     "pear-link": "^4.2.1",
+    "pear-opstream": "^1.0.1",
     "pear-opwait": "^1.0.0",
     "pear-pipe": "^1.0.6",
     "pear-terminal": "^1.1.3",
-    "streamx": "^2.23.0",
     "which-runtime": "^1.3.2"
   },
   "devDependencies": {
