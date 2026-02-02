@@ -17,8 +17,14 @@
     "main": "cmd.js",
     "stage": {
       "ignore": [
-        "**/node_modules",
-        "!/node_modules"
+        ".gitignore",
+        ".gitattributes",
+        ".github",
+        ".git",
+        ".prettierrc",
+        "examples",
+        "test",
+        "coverage"
       ]
     },
     "platform": {
