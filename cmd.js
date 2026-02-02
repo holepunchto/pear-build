@@ -52,7 +52,6 @@ const program = command(
       if (fs.existsSync(path.join(dotPear, 'appling')) === false) {
         // first try to sync staged .pear
         await opwait(dump(link, { dir, only: '.pear', force: true }))
-
         // if not staged, then generate .pear from template
         if (fs.existsSync(path.join(dotPear, 'appling')) === false) {
           await fsp.mkdir(dotPear, { recursive: true })
