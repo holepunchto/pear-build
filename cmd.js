@@ -50,13 +50,13 @@ const program = command(
 
       // .pear must exist before building
       if (fs.existsSync(path.join(dotPear, 'appling')) === false) {
-        // first try to sync staged .pear
+        // try to sync staged .pear
         await opwait(dump(link, { dir, only: '.pear', force: true }))
-        // if not staged, then generate .pear from template
+        // if not staged then generate .pear from template
         if (fs.existsSync(path.join(dotPear, 'appling')) === false) {
           await fsp.mkdir(dotPear, { recursive: true })
           const defaults = {
-            id: `${pkgPear.build?.id || pkgPear.id || z32}`,
+            id: `${drive?.alias || pkgPear.build?.id || pkgPear.id || z32}`,
             name: `${pkgPear.build?.name || pkgPear.name || manifest.name}`,
             version: `${pkgPear.build?.version || pkgPear.version || manifest.version}`,
             author: `${pkgPear.build?.author || pkgPear.author || manifest.author}`,
