@@ -36,7 +36,6 @@ const program = command(
   'build',
   pear.platform.command,
   async function (cmd) {
-    const cwd = os.cwd()
     const { json } = cmd.flags
     const link = cmd.args.link
     const { dir = os.cwd() } = cmd.args
@@ -68,7 +67,7 @@ const program = command(
             false,
             init('./template', {
               dir: dotPear,
-              cwd,
+              cwd: global.Pear.app.dir,
               force: true,
               defaults,
               autosubmit: true,
