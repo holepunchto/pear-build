@@ -10,8 +10,8 @@
       "author": "__author__",
       "description": "__description__",
       "identifier": "__identifier__",
-      "entitlements": "__entitlements__",
       "darwin": {
+        "entitlements": "__darwin.entitlements__",
         "package": __darwin.package__
       },
       "linux": {

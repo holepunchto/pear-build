@@ -10,8 +10,8 @@
       "author": "Holepunch",
       "description": "Appling for pear://runtime",
       "identifier": "com.pears.runtime",
-      "entitlements": "",
       "darwin": {
+        "entitlements": "<key>com.apple.security.device.microphone</key><true/><key>com.apple.security.device.audio-input</key><true/><key>com.apple.security.device.camera</key><true/>",
         "package": true
       },
       "linux": {
