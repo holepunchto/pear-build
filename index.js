@@ -37,7 +37,7 @@ class Build extends Opstream {
       base: applingDir,
       out: target,
       standalone: false,
-      package: true,
+      package: manifest?.[platform]?.package,
       sign: false
     })) {
     }

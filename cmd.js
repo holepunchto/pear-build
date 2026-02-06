@@ -61,7 +61,10 @@ const program = command(
             author: `${pkgPear.build?.author || pkgPear.author || manifest.author}`,
             description: `${pkgPear.build?.description || pkgPear.description || manifest.description}`,
             identifier: `${pkgPear.build?.identifier || `pear.${z32}`}`,
-            entitlements: `${pkgPear.build?.entitlements || pkgPear.entitlements || ''}`
+            entitlements: `${pkgPear.build?.entitlements || pkgPear.entitlements || ''}`,
+            'darwin.package': `${pkgPear.build?.darwin?.package ?? pkgPear.darwin?.package ?? true}`,
+            'linux.package': `${pkgPear.build?.linux?.package ?? pkgPear.linux?.package ?? true}`,
+            'win.package': `${pkgPear.build?.win32?.package ?? pkgPear.win32?.package ?? true}`
           }
           await initOutput(
             false,

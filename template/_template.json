@@ -27,6 +27,18 @@
     {
       "name": "entitlements",
       "prompt": "entitlements"
+    },
+    {
+      "name": "darwin.package",
+      "prompt": "darwin.package"
+    },
+    {
+      "name": "linux.package",
+      "prompt": "linux.package"
+    },
+    {
+      "name": "win.package",
+      "prompt": "win.package"
     }
   ]
 }

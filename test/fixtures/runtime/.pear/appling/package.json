@@ -10,7 +10,16 @@
       "author": "Holepunch",
       "description": "Appling for pear://runtime",
       "identifier": "com.pears.runtime",
-      "entitlements": ""
+      "entitlements": "",
+      "darwin": {
+        "package": true
+      },
+      "linux": {
+        "package": true
+      },
+      "win32": {
+        "package": true
+      }
     }
   },
   "dependencies": {
