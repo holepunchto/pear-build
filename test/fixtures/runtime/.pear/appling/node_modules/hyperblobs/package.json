@@ -1,0 +1,48 @@
+{
+  "name": "hyperblobs",
+  "version": "2.8.0",
+  "description": "A blob store for Hypercore",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && brittle test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holepunchto/hyperblobs.git"
+  },
+  "keywords": [
+    "hypercore",
+    "blob",
+    "store"
+  ],
+  "author": "Andrew Osheroff <andrewosh@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/holepunchto/hyperblobs/issues"
+  },
+  "homepage": "https://github.com/holepunchto/hyperblobs#readme",
+  "files": [
+    "index.js",
+    "lib/**.js"
+  ],
+  "imports": {
+    "events": {
+      "bare": "bare-events",
+      "default": "events"
+    }
+  },
+  "dependencies": {
+    "b4a": "^1.6.1",
+    "bare-events": "^2.5.0",
+    "hypercore-errors": "^1.1.1",
+    "mutexify": "^1.4.0",
+    "speedometer": "^1.1.0",
+    "streamx": "^2.13.2"
+  },
+  "devDependencies": {
+    "brittle": "^3.1.0",
+    "hypercore": "^10.18.0",
+    "random-access-memory": "^6.0.0",
+    "standard": "^17.0.0"
+  }
+}

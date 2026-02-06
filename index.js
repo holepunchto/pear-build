@@ -1,7 +1,6 @@
 'use strict'
 const bareBuild = require('bare-build')
 const path = require('bare-path')
-const { spawnSync } = require('bare-subprocess')
 const Opstream = require('pear-opstream')
 const { arch, platform } = require('which-runtime')
 const { readFile } = require('bare-fs/promises')
@@ -23,8 +22,6 @@ class Build extends Opstream {
     const target = path.join(dotPear, 'target', host)
 
     this.push({ tag: 'build', data: { target } })
-    const npm = platform === 'win32' ? 'npm.cmd' : 'npm'
-    spawnSync(npm, ['install'], { cwd: applingDir, stdio: 'inherit' })
     for await (const _ of bareBuild(entry, {
       name: manifest.name,
       version: manifest.version,

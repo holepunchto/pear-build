@@ -1,3 +1,5 @@
 coverage
-node_modules/
-.pear
+/.pear/
+node_modules
+!template/appling/node_modules/
+!test/fixtures/runtime/.pear/appling/node_modules/
