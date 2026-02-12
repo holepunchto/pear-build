@@ -1,0 +1,30 @@
+{
+  "name": "pear-build",
+  "version": "0.0.0",
+  "main": "index.js",
+  "type": "commonjs",
+  "bin": "index.js",
+  "description": "Build appling for a Pear application",
+  "author": "Holepunch Inc",
+  "license": "Apache-2.0",
+  "files": [],
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "prettier --check ."
+  },
+  "dependencies": {
+    "bare-build": "^0.4.1",
+    "bare-fs": "^4.5.3",
+    "bare-os": "^3.6.2",
+    "bare-path": "^3.0.0",
+    "hypercore-id-encoding": "^1.3.0",
+    "pear-opstream": "^1.0.1",
+    "pear-opwait": "^1.0.0",
+    "pear-terminal": "^1.1.3",
+    "which-runtime": "^1.3.2"
+  },
+  "devDependencies": {
+    "prettier": "^3.7.4",
+    "prettier-config-holepunch": "^2.0.0"
+  }
+}

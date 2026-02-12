@@ -1,0 +1,28 @@
+{
+  "name": "appling",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "pear": {
+    "build": {
+      "id": "__id__",
+      "name": "__name__",
+      "version": "__version__",
+      "author": "__author__",
+      "description": "__description__",
+      "identifier": "__identifier__",
+      "darwin": {
+        "entitlements": "__darwin.entitlements__",
+        "package": __darwin.package__
+      },
+      "linux": {
+        "package": __linux.package__
+      },
+      "win32": {
+        "package": __win.package__
+      }
+    }
+  },
+  "dependencies": {
+    "pear-installer": "^0.0.0"
+  }
+}

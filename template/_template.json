@@ -1,0 +1,44 @@
+{
+  "params": [
+    {
+      "name": "id",
+      "prompt": "id"
+    },
+    {
+      "name": "name",
+      "prompt": "name"
+    },
+    {
+      "name": "version",
+      "prompt": "version"
+    },
+    {
+      "name": "author",
+      "prompt": "author"
+    },
+    {
+      "name": "description",
+      "prompt": "description"
+    },
+    {
+      "name": "identifier",
+      "prompt": "identifier"
+    },
+    {
+      "name": "darwin.entitlements",
+      "prompt": "darwin.entitlements"
+    },
+    {
+      "name": "darwin.package",
+      "prompt": "darwin.package"
+    },
+    {
+      "name": "linux.package",
+      "prompt": "linux.package"
+    },
+    {
+      "name": "win.package",
+      "prompt": "win.package"
+    }
+  ]
+}
