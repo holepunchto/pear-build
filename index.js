@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 const path = require('path')
-const os = require('os')
 const fs = require('fs')
 const Localdrive = require('localdrive')
 const { command, flag, bail } = require('paparam')
@@ -15,24 +14,23 @@ const program = command(
   flag('--win32-x64-app [path]', 'Path to Windows x64 app'),
   flag('--target [path]', 'Target build dir'),
   async function (cmd) {
-    const cwd = os.cwd ? os.cwd() : process.cwd()
-    const package = path.join(cwd, cmd.flags.package)
+    const package = path.resolve(cmd.flags.package)
     const pkg = require(package)
-    const { target = path.join(cwd, pkg.name + '-' + pkg.version) } = cmd.flags
+    const { target = path.resolve(pkg.name + '-' + pkg.version) } = cmd.flags
     const darwinArm64App = cmd.flags.darwinArm64App
-      ? ['darwin-arm64', path.join(cwd, cmd.flags.darwinArm64App)]
+      ? ['darwin-arm64', path.resolve(cmd.flags.darwinArm64App)]
       : null
     const darwinX64App = cmd.flags.darwinX64App
-      ? ['darwin-x64', path.join(cwd, cmd.flags.darwinX64App)]
+      ? ['darwin-x64', path.resolve(cmd.flags.darwinX64App)]
       : null
     const linuxArm64App = cmd.flags.linuxArm64App
-      ? ['linux-arm64', path.join(cwd, cmd.flags.linuxArm64App)]
+      ? ['linux-arm64', path.resolve(cmd.flags.linuxArm64App)]
       : null
     const linuxX64App = cmd.flags.linuxX64App
-      ? ['linux-x64', path.join(cwd, cmd.flags.linuxX64App)]
+      ? ['linux-x64', path.resolve(cmd.flags.linuxX64App)]
       : null
     const win32X64App = cmd.flags.win32X64App
-      ? ['window-x64', path.join(cwd, cmd.flags.win32X64App)]
+      ? ['window-x64', path.resolve(cmd.flags.win32X64App)]
       : null
 
     const byArch = path.join(target, 'by-arch')
