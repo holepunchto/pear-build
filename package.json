@@ -8,6 +8,20 @@
   "author": "Holepunch Inc",
   "license": "Apache-2.0",
   "files": [],
+  "imports": {
+    "path": {
+      "bare": "bare-path",
+      "default": "path"
+    },
+    "os": {
+      "bare": "bare-os",
+      "default": "os"
+    },
+    "fs": {
+      "bare": "bare-fs",
+      "default": "fs"
+    }
+  },
   "scripts": {
     "format": "prettier --write .",
     "lint": "prettier --check ."
@@ -19,6 +33,7 @@
     "bare-path": "^3.0.0",
     "hypercore-id-encoding": "^1.3.0",
     "localdrive": "^2.2.0",
+    "pear-link": "^4.2.1",
     "pear-opstream": "^1.0.1",
     "pear-opwait": "^1.0.0",
     "pear-terminal": "^1.1.3",
