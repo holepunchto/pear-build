@@ -1,5 +1,5 @@
 #!/usr/bin/env bare
-const path = require('path')
+const path = require('bare-path')
 const os = require('bare-os')
 const fs = require('bare-fs')
 const Localdrive = require('localdrive')
