@@ -1,4 +1,4 @@
-#!/usr/bin/bare
+#!/usr/bin/env bare
 const path = require('path')
 const os = require('bare-os')
 const fs = require('bare-fs')
