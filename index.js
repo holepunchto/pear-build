@@ -30,7 +30,7 @@ const program = command(
       ? ['linux-x64', path.resolve(cmd.flags.linuxX64App)]
       : null
     const win32X64App = cmd.flags.win32X64App
-      ? ['window-x64', path.resolve(cmd.flags.win32X64App)]
+      ? ['win32-x64', path.resolve(cmd.flags.win32X64App)]
       : null
 
     const byArch = path.join(target, 'by-arch')
