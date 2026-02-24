@@ -73,8 +73,8 @@ const program = command(
     for (const [arch, app] of apps) {
       const isMobile = arch.startsWith('ios') || arch.startsWith('android')
       const appName = isMobile ? (pkg.productName ?? pkg.name) : basename(app)
-      if (isMobile && typeof appName !== 'string') {
-        throw new Error(`app name needs to be type string. It is type ${typeof appName}`)
+      if (typeof appName !== 'string') {
+        throw new Error('package.json productName or name is a required field string')
       }
       const archApp = path.join(byArch, arch, 'app', appName)
       await fs.promises.mkdir(archApp, { recursive: true })
