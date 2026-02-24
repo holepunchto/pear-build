@@ -23,7 +23,6 @@ const program = command(
   async function (cmd) {
     const package = path.resolve(cmd.flags.package)
     const pkg = require(package)
-    const productName = pkg.productName ?? pkg.name
     const { target = path.resolve(pkg.name + '-' + pkg.version) } = cmd.flags
     const darwinArm64App = cmd.flags.darwinArm64App
       ? ['darwin-arm64', path.resolve(cmd.flags.darwinArm64App)]
@@ -73,13 +72,11 @@ const program = command(
     const promises = []
     for (const [arch, app] of apps) {
       const isMobile = arch.startsWith('ios') || arch.startsWith('android')
-      if (isMobile && typeof productName !== 'string') {
-        const field = pkg.productName ? 'productName' : 'name'
-        throw new Error(
-          `${field} field in package.json must be of type string, but it is type ${typeof productName}`
-        )
+      const appName = isMobile ? (pkg.productName ?? pkg.name) : basename(app)
+      if (isMobile && typeof appName !== 'string') {
+        throw new Error(`app name needs to be type string. It is type ${typeof appName}`)
       }
-      const archApp = path.join(byArch, arch, 'app', isMobile ? productName : path.basename(app))
+      const archApp = path.join(byArch, arch, 'app', appName)
       await fs.promises.mkdir(archApp, { recursive: true })
       const src = new Localdrive(app)
       const dst = new Localdrive(archApp)
