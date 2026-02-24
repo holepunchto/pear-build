@@ -45,13 +45,14 @@ const program = command(
     const noop = () => {}
     const promises = []
     for (const [arch, app] of apps) {
-      const archApp = path.join(byArch, arch, 'app', path.basename(app))
+      const archApp = path.join(byArch, arch, 'app')
+      const prefix = '/' + path.basename(app)
       await fs.promises.mkdir(archApp, { recursive: true })
       const src = new Localdrive(app)
       const dst = new Localdrive(archApp)
       await src.ready()
       await dst.ready()
-      const mirror = src.mirror(dst)
+      const mirror = src.mirror(dst, { prefix })
       console.log(app, 'mirroring to', archApp)
       const promise = mirror.done()
       promises.push(promise)
