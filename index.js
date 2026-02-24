@@ -7,6 +7,7 @@ const { command, flag, bail } = require('paparam')
 const program = command(
   'build',
   flag('--package [path]', 'Path to project package.json'),
+  flag('--target [path]', 'Target build dir'),
   flag('--darwin-arm64-app [path]', 'Path to Mac ARM64 app'),
   flag('--darwin-x64-app [path]', 'Path to Mac x64 app'),
   flag('--linux-arm64-app [path]', 'Path to Linux ARM64 app'),
