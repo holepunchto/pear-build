@@ -73,8 +73,12 @@ const program = command(
     const promises = []
     for (const [arch, app] of apps) {
       const isMobile = arch.startsWith('ios') || arch.startsWith('android')
-      if (isMobile && !productName)
-        throw new Error('productName or name field in package.json required')
+      if (isMobile && typeof productName !== 'string') {
+        const field = pkg.productName ? 'productName' : 'name'
+        throw new Error(
+          `${field} field in package.json must be of type string, received ${typeof productName}`
+        )
+      }
       const archApp = path.join(byArch, arch, 'app', isMobile ? productName : path.basename(app))
       await fs.promises.mkdir(archApp, { recursive: true })
       const src = new Localdrive(app)
