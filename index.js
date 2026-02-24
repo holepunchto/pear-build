@@ -50,13 +50,24 @@ module.exports = async function build(dir, opts = {}) {
     if (typeof appName !== 'string') {
       throw new Error('package.json productName or name is a required field string')
     }
-    const archApp = path.join(byArch, arch, 'app', appName)
+    const archApp = path.join(byArch, arch, 'app')
     await fs.promises.mkdir(archApp, { recursive: true })
-    const src = new Localdrive(app)
-    const dst = new Localdrive(archApp)
+
+    let src, dst, mirror
+    if (fs.statSync(app).isDirectory()) {
+      const appDir = path.join(archApp, appName)
+      await fs.promises.mkdir(appDir, { recursive: true })
+      src = new Localdrive(app)
+      dst = new Localdrive(appDir)
+      mirror = src.mirror(dst)
+    } else {
+      src = new Localdrive(path.dirname(app))
+      dst = new Localdrive(archApp)
+      mirror = src.mirror(dst, { prefix: '/' + path.basename(app) })
+    }
+
     await src.ready()
     await dst.ready()
-    const mirror = src.mirror(dst)
     console.log(app, 'mirroring to', archApp)
     const promise = mirror.done()
     promises.push(promise)
