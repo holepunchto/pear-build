@@ -76,7 +76,7 @@ const program = command(
       if (isMobile && typeof productName !== 'string') {
         const field = pkg.productName ? 'productName' : 'name'
         throw new Error(
-          `${field} field in package.json must be of type string, received ${typeof productName}`
+          `${field} field in package.json must be of type string, but it is type ${typeof productName}`
         )
       }
       const archApp = path.join(byArch, arch, 'app', isMobile ? productName : path.basename(app))
