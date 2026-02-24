@@ -13,13 +13,16 @@ const program = command(
   flag('--linux-x64-app [path]', 'Path to Linux x64 app'),
   flag('--win32-x64-app [path]', 'Path to Windows x64 app'),
   flag('--ios-arm64 [path]', 'Path to iOS ARM64 folder (ota bundle and assets)'),
-  flag('--ios-arm64-simulator [path]', 'Path to iOS ARM64-Simulator folder (ota bundle and assets)'),
+  flag(
+    '--ios-arm64-simulator [path]',
+    'Path to iOS ARM64-Simulator folder (ota bundle and assets)'
+  ),
   flag('--ios-x64-simulator [path]', 'Path to iOS x64-Simulator folder (ota bundle and assets)'),
   flag('--android-arm64 [path]', 'Path to android ARM64 folder (ota bundle and assets)'),
   async function (cmd) {
     const package = path.resolve(cmd.flags.package)
     const pkg = require(package)
-    const productName = pkg.productName
+    const productName = pkg.productName ?? pkg.name
     const { target = path.resolve(pkg.name + '-' + pkg.version) } = cmd.flags
     const darwinArm64App = cmd.flags.darwinArm64App
       ? ['darwin-arm64', path.resolve(cmd.flags.darwinArm64App)]
@@ -69,7 +72,8 @@ const program = command(
     const promises = []
     for (const [arch, app] of apps) {
       const isMobile = arch.startsWith('ios') || arch.startsWith('android')
-      if (isMobile && !productName ) throw new Error('productName field in package.json required')
+      if (isMobile && !productName)
+        throw new Error('productName or name field in package.json required')
       const archApp = path.join(byArch, arch, 'app', isMobile ? productName : path.basename(app))
       await fs.promises.mkdir(archApp, { recursive: true })
       const src = new Localdrive(app)
