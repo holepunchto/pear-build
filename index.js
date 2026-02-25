@@ -16,9 +16,13 @@ module.exports = async function build(dir, opts = {}) {
   const linuxX64App = opts.linuxX64App ? ['linux-x64', path.resolve(opts.linuxX64App)] : null
   const win32X64App = opts.win32X64App ? ['win32-x64', path.resolve(opts.win32X64App)] : null
   const iosArm64 = opts.iosArm64 ? ['ios-arm64', path.resolve(opts.iosArm64)] : null
-  const iosArm64Sim = opts.iosArm64Sim ? ['ios-arm64-sim', path.resolve(opts.iosArm64Sim)] : null
-  const iosx64Sim = opts.iosx64Sim ? ['ios-x64-sim', path.resolve(opts.iosx64Sim)] : null
-  const androidArm64 = opts.win32X64App ? ['android-arm64', path.resolve(opts.androidArm64)] : null
+  const iosArm64Sim = opts.iosArm64Simulator
+    ? ['ios-arm64-simulator', path.resolve(opts.iosArm64Simulator)]
+    : null
+  const iosx64Sim = opts.iosX64Simulator
+    ? ['ios-x64-simulator', path.resolve(opts.iosX64Simulator)]
+    : null
+  const androidArm64 = opts.androidArm64 ? ['android-arm64', path.resolve(opts.androidArm64)] : null
 
   const byArch = path.join(target, 'by-arch')
 
@@ -42,7 +46,7 @@ module.exports = async function build(dir, opts = {}) {
   const promises = []
   for (const [arch, app] of apps) {
     const isMobile = arch.startsWith('ios') || arch.startsWith('android')
-    const appName = isMobile ? (pkg.productName ?? pkg.name) : basename(app)
+    const appName = isMobile ? (pkg.productName ?? pkg.name) : path.basename(app)
     if (typeof appName !== 'string') {
       throw new Error('package.json productName or name is a required field string')
     }
