@@ -14,8 +14,8 @@ const program = command(
   flag('--win32-x64-app [path]', 'Path to Windows x64 app'),
   flag('--target [path]', 'Target build dir'),
   async function (cmd) {
-    const package = path.resolve(cmd.flags.package)
-    const pkg = require(package)
+    const pkgPath = path.resolve(cmd.flags.package)
+    const pkg = require(pkgPath)
     const { target = path.resolve(pkg.name + '-' + pkg.version) } = cmd.flags
     const darwinArm64App = cmd.flags.darwinArm64App
       ? ['darwin-arm64', path.resolve(cmd.flags.darwinArm64App)]
@@ -37,7 +37,7 @@ const program = command(
 
     await fs.promises.mkdir(byArch, { recursive: true })
 
-    fs.writeFileSync(path.join(target, 'package.json'), fs.readFileSync(package))
+    fs.writeFileSync(path.join(target, 'package.json'), fs.readFileSync(pkgPath))
 
     const apps = [darwinArm64App, darwinX64App, linuxArm64App, linuxX64App, win32X64App].filter(
       Boolean
