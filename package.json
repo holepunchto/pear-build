@@ -7,7 +7,9 @@
   "description": "Build appling for a Pear application",
   "author": "Holepunch Inc",
   "license": "Apache-2.0",
-  "files": [],
+  "files": [
+    "index.js"
+  ],
   "imports": {
     "path": {
       "bare": "bare-path",
