@@ -23,7 +23,7 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "prettier --check . && lunte",
-    "test": "brittle-bare test/all.js"
+    "test": "brittle-node test/all.js"
   },
   "dependencies": {
     "bare-fs": "^4.5.3",
