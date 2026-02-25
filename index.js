@@ -1,60 +1,42 @@
-#!/usr/bin/env node
 const path = require('path')
 const fs = require('fs')
 const Localdrive = require('localdrive')
-const { command, flag, bail } = require('paparam')
 
-const program = command(
-  'build',
-  flag('--package [path]', 'Path to project package.json'),
-  flag('--target [path]', 'Target build dir'),
-  flag('--darwin-arm64-app [path]', 'Path to Mac ARM64 app'),
-  flag('--darwin-x64-app [path]', 'Path to Mac x64 app'),
-  flag('--linux-arm64-app [path]', 'Path to Linux ARM64 app'),
-  flag('--linux-x64-app [path]', 'Path to Linux x64 app'),
-  flag('--win32-x64-app [path]', 'Path to Windows x64 app'),
-  flag('--ios-arm64 [path]', 'Path to iOS ARM64 folder (ota bundle and assets)'),
-  flag(
-    '--ios-arm64-simulator [path]',
-    'Path to iOS ARM64-Simulator folder (ota bundle and assets)'
-  ),
-  flag('--ios-x64-simulator [path]', 'Path to iOS x64-Simulator folder (ota bundle and assets)'),
-  flag('--android-arm64 [path]', 'Path to android ARM64 folder (ota bundle and assets)'),
-  async function (cmd) {
-    const package = path.resolve(cmd.flags.package)
-    const pkg = require(package)
-    const { target = path.resolve(pkg.name + '-' + pkg.version) } = cmd.flags
-    const darwinArm64App = cmd.flags.darwinArm64App
-      ? ['darwin-arm64', path.resolve(cmd.flags.darwinArm64App)]
+module.exports = async function build(dir, opts = {}) {
+  const pkgPath = path.resolve(dir)
+  const pkg = require(pkgPath)
+  const { target = path.resolve(pkg.name + '-' + pkg.version) } = opts
+    const darwinArm64App = opts.flags.darwinArm64App
+      ? ['darwin-arm64', path.resolve(opts.flags.darwinArm64App)]
       : null
-    const darwinX64App = cmd.flags.darwinX64App
-      ? ['darwin-x64', path.resolve(cmd.flags.darwinX64App)]
+    const darwinX64App = opts.flags.darwinX64App
+      ? ['darwin-x64', path.resolve(opts.flags.darwinX64App)]
       : null
-    const linuxArm64App = cmd.flags.linuxArm64App
-      ? ['linux-arm64', path.resolve(cmd.flags.linuxArm64App)]
+    const linuxArm64App = opts.flags.linuxArm64App
+      ? ['linux-arm64', path.resolve(opts.flags.linuxArm64App)]
       : null
-    const linuxX64App = cmd.flags.linuxX64App
-      ? ['linux-x64', path.resolve(cmd.flags.linuxX64App)]
+    const linuxX64App = opts.flags.linuxX64App
+      ? ['linux-x64', path.resolve(opts.flags.linuxX64App)]
       : null
-    const win32X64App = cmd.flags.win32X64App
-      ? ['win32-x64', path.resolve(cmd.flags.win32X64App)]
+    const win32X64App = opts.flags.win32X64App
+      ? ['win32-x64', path.resolve(opts.flags.win32X64App)]
       : null
-    const iosArm64 = cmd.flags.iosArm64 ? ['ios-arm64', path.resolve(cmd.flags.iosArm64)] : null
-    const iosArm64Sim = cmd.flags.iosArm64Sim
-      ? ['ios-arm64-sim', path.resolve(cmd.flags.iosArm64Sim)]
+    const iosArm64 = opts.flags.iosArm64 ? ['ios-arm64', path.resolve(opts.flags.iosArm64)] : null
+    const iosArm64Sim = opts.flags.iosArm64Sim
+      ? ['ios-arm64-sim', path.resolve(opts.flags.iosArm64Sim)]
       : null
-    const iosx64Sim = cmd.flags.iosx64Sim
-      ? ['ios-x64-sim', path.resolve(cmd.flags.iosx64Sim)]
+    const iosx64Sim = opts.flags.iosx64Sim
+      ? ['ios-x64-sim', path.resolve(opts.flags.iosx64Sim)]
       : null
-    const androidArm64 = cmd.flags.win32X64App
-      ? ['android-arm64', path.resolve(cmd.flags.androidArm64)]
+    const androidArm64 = opts.flags.win32X64App
+      ? ['android-arm64', path.resolve(opts.flags.androidArm64)]
       : null
 
-    const byArch = path.join(target, 'by-arch')
+  const byArch = path.join(target, 'by-arch')
 
-    await fs.promises.mkdir(byArch, { recursive: true })
+  await fs.promises.mkdir(byArch, { recursive: true })
 
-    fs.writeFileSync(path.join(target, 'package.json'), fs.readFileSync(package))
+  fs.writeFileSync(path.join(target, 'package.json'), fs.readFileSync(pkgPath))
 
     const apps = [
       darwinArm64App,
@@ -93,11 +75,5 @@ const program = command(
       await dst.close()
     }
 
-    await Promise.all(promises)
-  },
-  bail((bailed) => {
-    console.error('bailed', bailed.reason)
-  })
-)
-
-program.parse(global.Bare ? global.Bare.argv.slice(2) : process.argv.slice(2))
+  await Promise.all(promises)
+}
