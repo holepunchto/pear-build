@@ -45,18 +45,20 @@ module.exports = async function build(dir, opts = {}) {
   const noop = () => {}
   const promises = []
   for (const [arch, app] of apps) {
+    const isFile = fs.statSync(app).isFile()
+    const fileName = path.basename(app)
     const isMobile = arch.startsWith('ios') || arch.startsWith('android')
-    const appName = isMobile ? (pkg.productName ?? pkg.name) : path.basename(app)
+    const appName = isMobile ? (pkg.productName ?? pkg.name) : fileName
     if (typeof appName !== 'string') {
       throw new Error('package.json productName or name is a required field string')
     }
     const archApp = path.join(byArch, arch, 'app', appName)
     await fs.promises.mkdir(archApp, { recursive: true })
-    const src = new Localdrive(app)
+    const src = isFile ? new Localdrive(path.dirname(app)) : new Localdrive(app)
     const dst = new Localdrive(archApp)
     await src.ready()
     await dst.ready()
-    const mirror = src.mirror(dst)
+    const mirror = src.mirror(dst, isFile ? { filter: (key) => key === `/${fileName}` } : {})
     console.log(app, 'mirroring to', archApp)
     const promise = mirror.done()
     promises.push(promise)
