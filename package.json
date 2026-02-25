@@ -3,12 +3,13 @@
   "version": "0.0.2",
   "main": "index.js",
   "type": "commonjs",
-  "bin": "index.js",
+  "bin": "bin.js",
   "description": "Build appling for a Pear application",
   "author": "Holepunch Inc",
   "license": "Apache-2.0",
   "files": [
-    "index.js"
+    "index.js",
+    "bin.js"
   ],
   "imports": {
     "path": {
