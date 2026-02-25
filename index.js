@@ -6,31 +6,19 @@ module.exports = async function build(dir, opts = {}) {
   const pkgPath = path.resolve(dir)
   const pkg = require(pkgPath)
   const { target = path.resolve(pkg.name + '-' + pkg.version) } = opts
-  const darwinArm64App = opts.flags.darwinArm64App
-    ? ['darwin-arm64', path.resolve(opts.flags.darwinArm64App)]
+  const darwinArm64App = opts.darwinArm64App
+    ? ['darwin-arm64', path.resolve(opts.darwinArm64App)]
     : null
-  const darwinX64App = opts.flags.darwinX64App
-    ? ['darwin-x64', path.resolve(opts.flags.darwinX64App)]
+  const darwinX64App = opts.darwinX64App ? ['darwin-x64', path.resolve(opts.darwinX64App)] : null
+  const linuxArm64App = opts.linuxArm64App
+    ? ['linux-arm64', path.resolve(opts.linuxArm64App)]
     : null
-  const linuxArm64App = opts.flags.linuxArm64App
-    ? ['linux-arm64', path.resolve(opts.flags.linuxArm64App)]
-    : null
-  const linuxX64App = opts.flags.linuxX64App
-    ? ['linux-x64', path.resolve(opts.flags.linuxX64App)]
-    : null
-  const win32X64App = opts.flags.win32X64App
-    ? ['win32-x64', path.resolve(opts.flags.win32X64App)]
-    : null
-  const iosArm64 = opts.flags.iosArm64 ? ['ios-arm64', path.resolve(opts.flags.iosArm64)] : null
-  const iosArm64Sim = opts.flags.iosArm64Sim
-    ? ['ios-arm64-sim', path.resolve(opts.flags.iosArm64Sim)]
-    : null
-  const iosx64Sim = opts.flags.iosx64Sim
-    ? ['ios-x64-sim', path.resolve(opts.flags.iosx64Sim)]
-    : null
-  const androidArm64 = opts.flags.win32X64App
-    ? ['android-arm64', path.resolve(opts.flags.androidArm64)]
-    : null
+  const linuxX64App = opts.linuxX64App ? ['linux-x64', path.resolve(opts.linuxX64App)] : null
+  const win32X64App = opts.win32X64App ? ['win32-x64', path.resolve(opts.win32X64App)] : null
+  const iosArm64 = opts.iosArm64 ? ['ios-arm64', path.resolve(opts.iosArm64)] : null
+  const iosArm64Sim = opts.iosArm64Sim ? ['ios-arm64-sim', path.resolve(opts.iosArm64Sim)] : null
+  const iosx64Sim = opts.iosx64Sim ? ['ios-x64-sim', path.resolve(opts.iosx64Sim)] : null
+  const androidArm64 = opts.win32X64App ? ['android-arm64', path.resolve(opts.androidArm64)] : null
 
   const byArch = path.join(target, 'by-arch')
 
