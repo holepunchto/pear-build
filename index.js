@@ -2,25 +2,19 @@ const path = require('path')
 const fs = require('fs')
 const Localdrive = require('localdrive')
 
-module.exports = async function (cmd) {
-  const pkgPath = path.resolve(cmd.flags.package)
+module.exports = async function build(dir, opts = {}) {
+  const pkgPath = path.resolve(dir)
   const pkg = require(pkgPath)
-  const { target = path.resolve(pkg.name + '-' + pkg.version) } = cmd.flags
-  const darwinArm64App = cmd.flags.darwinArm64App
-    ? ['darwin-arm64', path.resolve(cmd.flags.darwinArm64App)]
+  const { target = path.resolve(pkg.name + '-' + pkg.version) } = opts
+  const darwinArm64App = opts.darwinArm64App
+    ? ['darwin-arm64', path.resolve(opts.darwinArm64App)]
     : null
-  const darwinX64App = cmd.flags.darwinX64App
-    ? ['darwin-x64', path.resolve(cmd.flags.darwinX64App)]
+  const darwinX64App = opts.darwinX64App ? ['darwin-x64', path.resolve(opts.darwinX64App)] : null
+  const linuxArm64App = opts.linuxArm64App
+    ? ['linux-arm64', path.resolve(opts.linuxArm64App)]
     : null
-  const linuxArm64App = cmd.flags.linuxArm64App
-    ? ['linux-arm64', path.resolve(cmd.flags.linuxArm64App)]
-    : null
-  const linuxX64App = cmd.flags.linuxX64App
-    ? ['linux-x64', path.resolve(cmd.flags.linuxX64App)]
-    : null
-  const win32X64App = cmd.flags.win32X64App
-    ? ['win32-x64', path.resolve(cmd.flags.win32X64App)]
-    : null
+  const linuxX64App = opts.linuxX64App ? ['linux-x64', path.resolve(opts.linuxX64App)] : null
+  const win32X64App = opts.win32X64App ? ['win32-x64', path.resolve(opts.win32X64App)] : null
 
   const byArch = path.join(target, 'by-arch')
 

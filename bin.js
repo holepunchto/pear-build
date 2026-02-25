@@ -16,8 +16,17 @@ const cmd = command(
   flag('--target [path]', 'Target build dir'),
   async function (cmd) {
     if (cmd.flags.version) return console.log(`v${pkg.version}`)
+    const dir = cmd.flags.package
+    const opts = {
+      darwinArm64App: cmd.flags.darwinArm64App,
+      darwinX64App: cmd.flags.darwinX64App,
+      linuxArm64App: cmd.flags.linuxArm64App,
+      linuxX64App: cmd.flags.linuxX64App,
+      win32X64App: cmd.flags.win32X64App,
+      target: cmd.flags.target
+    }
     try {
-      await build(cmd)
+      await build(dir, opts)
     } catch (err) {
       if (err) console.error(err)
       if (typeof process !== 'undefined') process.exitCode = 1
