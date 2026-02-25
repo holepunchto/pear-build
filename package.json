@@ -20,7 +20,8 @@
   },
   "scripts": {
     "format": "prettier --write .",
-    "lint": "prettier --check . && lunte"
+    "lint": "prettier --check . && lunte",
+    "test": "brittle-bare test/all.js"
   },
   "dependencies": {
     "bare-fs": "^4.5.3",
@@ -29,6 +30,7 @@
     "paparam": "^1.10.0"
   },
   "devDependencies": {
+    "brittle": "^3.19.1",
     "lunte": "^1.6.0",
     "prettier": "^3.7.4",
     "prettier-config-holepunch": "^2.0.0"
