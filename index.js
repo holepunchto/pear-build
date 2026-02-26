@@ -48,36 +48,20 @@ module.exports = async function build(dir, opts = {}) {
   const noop = () => {}
   const promises = []
   for (const [arch, app] of apps) {
-    const isMobile = arch.startsWith('ios') || arch.startsWith('android')
-    const appName = isMobile ? (pkg.productName ?? pkg.name) : path.basename(app)
-    if (typeof appName !== 'string') {
-      throw new Error('package.json productName or name is a required field string')
-    }
+    const appName = path.basename(app)
     const archApp = path.join(byArch, arch, 'app')
     await fs.promises.mkdir(archApp, { recursive: true })
 
-    const stat = await fs.promises.stat(app)
-    let src, dst, mirror
-    if (stat.isDirectory()) {
-      const appDir = path.join(archApp, appName)
-      await fs.promises.mkdir(appDir, { recursive: true })
-      src = new Localdrive(app)
-      dst = new Localdrive(appDir)
-      mirror = src.mirror(dst)
-    } else {
-      src = new Localdrive(path.dirname(app))
-      dst = new Localdrive(archApp)
-      mirror = src.mirror(dst, { prefix: '/' + path.basename(app) })
-    }
+    const src = new Localdrive(path.dirname(app))
+    const dst = new Localdrive(archApp)
+    const mirror = src.mirror(dst, { prefix: '/' + appName })
 
     await src.ready()
     await dst.ready()
     console.log(app, 'mirroring to', archApp)
     const promise = mirror.done()
     promises.push(promise)
-    promise.then(() => {
-      console.log(app, 'mirrored to', archApp)
-    }, noop)
+    promise.then(() => console.log(app, 'mirrored to', archApp), noop)
     await src.close()
     await dst.close()
   }
