@@ -28,7 +28,7 @@ module.exports = async function build(dir, opts = {}) {
 
   await fs.promises.mkdir(byArch, { recursive: true })
 
-  fs.writeFileSync(path.join(target, 'package.json'), fs.readFileSync(pkgPath))
+  await fs.promises.writeFile(path.join(target, 'package.json'), await fs.promises.readFile(pkgPath))
 
   const apps = [
     darwinArm64App,
@@ -53,8 +53,9 @@ module.exports = async function build(dir, opts = {}) {
     const archApp = path.join(byArch, arch, 'app')
     await fs.promises.mkdir(archApp, { recursive: true })
 
+    const stat = await fs.promises.stat(app)
     let src, dst, mirror
-    if (fs.statSync(app).isDirectory()) {
+    if (stat.isDirectory()) {
       const appDir = path.join(archApp, appName)
       await fs.promises.mkdir(appDir, { recursive: true })
       src = new Localdrive(app)
