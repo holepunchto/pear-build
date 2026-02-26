@@ -28,7 +28,10 @@ module.exports = async function build(dir, opts = {}) {
 
   await fs.promises.mkdir(byArch, { recursive: true })
 
-  await fs.promises.writeFile(path.join(target, 'package.json'), await fs.promises.readFile(pkgPath))
+  await fs.promises.writeFile(
+    path.join(target, 'package.json'),
+    await fs.promises.readFile(pkgPath)
+  )
 
   const apps = [
     darwinArm64App,
