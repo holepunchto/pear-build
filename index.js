@@ -48,22 +48,40 @@ module.exports = async function build(dir, opts = {}) {
   const noop = () => {}
   const promises = []
   for (const [arch, app] of apps) {
-    const archApp = path.join(byArch, arch, 'app')
-    await fs.promises.mkdir(archApp, { recursive: true })
+    const { srcPath, dstPath, prefix } = getPaths(byArch, arch, app, pkg)
+    await fs.promises.mkdir(dstPath, { recursive: true })
 
-    const src = new Localdrive(path.dirname(app))
-    const dst = new Localdrive(archApp)
-    const mirror = src.mirror(dst, { prefix: '/' + path.basename(app) })
+    const src = new Localdrive(srcPath)
+    const dst = new Localdrive(dstPath)
+    const mirror = src.mirror(dst, {prefix})
 
     await src.ready()
     await dst.ready()
-    console.log(app, 'mirroring to', archApp)
+    console.log(srcPath, 'mirroring to', dstPath)
     const promise = mirror.done()
     promises.push(promise)
-    promise.then(() => console.log(app, 'mirrored to', archApp), noop)
+    promise.then(() => console.log(srcPath, 'mirrored to', dstPath), noop)
     await src.close()
     await dst.close()
   }
 
   await Promise.all(promises)
+}
+
+function getPaths (byArch, arch, app, pkg){
+  const isMobile = arch.startsWith('ios') || arch.startsWith('android')
+
+  const segments = [byArch, arch, 'app']
+  let srcPath, dstPath, prefix
+  if (isMobile) {
+    srcPath = app
+    segments.push(pkg.productName ?? pkg.name)
+    dstPath = path.join(...segments)
+  } else {
+    srcPath = path.dirname(app)
+    dstPath = path.join(...segments)
+    prefix = '/' + path.basename(app)
+  }
+
+  return { srcPath, dstPath, prefix }
 }
