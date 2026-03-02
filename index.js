@@ -45,9 +45,14 @@ module.exports = async function build(dir, opts = {}) {
     androidArm64
   ].filter(Boolean)
 
+  const appName = pkg.productName ?? pkg.name
+
   const noop = () => {}
   const promises = []
   for (const [arch, app] of apps) {
+    if (path.basename(app, path.extname(app)) !== appName) {
+      throw new Error(`expected directory ${appName} but got ${path.basename(app)} for ${arch}`)
+    }
     const archApp = path.join(byArch, arch, 'app')
     await fs.promises.mkdir(archApp, { recursive: true })
 
