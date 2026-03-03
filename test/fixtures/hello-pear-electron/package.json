@@ -1,0 +1,8 @@
+{
+  "name": "hello-pear-electron",
+  "productName": "HelloPear",
+  "version": "1.0.0",
+  "author": "Holepunch Inc",
+  "description": "Example app",
+  "license": "Apache-2.0"
+}
