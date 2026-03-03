@@ -79,20 +79,36 @@ async function compareBuild(t, fixtureDir, targets) {
   const pkgPath = path.join(fixtureDir, 'package.json')
   const pkgBuffer = await fixture.get('/package.json')
   const pkg = JSON.parse(pkgBuffer)
+  const appName = pkg.productName ?? pkg.name
   const opts = { target }
+  const outputs = []
 
-  for (const { flag, input } of targets) {
-    opts[flag] = path.join(fixtureDir, input)
+  for (const { arch, flag, input } of targets) {
+    const isMobile = arch.startsWith('ios') || arch.startsWith('android')
+    let app = path.join(fixtureDir, input)
+
+    if (isMobile) {
+      const ext = path.extname(input)
+      const stageDir = path.join(tmpdir, 'staged-inputs', flag)
+      app = path.join(stageDir, appName + ext)
+      await new Localdrive(stageDir).put(
+        '/' + path.basename(app),
+        await fixture.get('/' + input.split(path.sep).join('/'))
+      )
+    }
+
+    opts[flag] = app
+    outputs.push({ arch, app })
   }
 
   await build(pkgPath, opts)
   await expected.put('/package.json', pkgBuffer)
 
-  for (const { arch, input } of targets) {
-    const isMobile = arch.startsWith('ios') || arch.startsWith('android')
-    const output = isMobile ? (pkg.productName ?? pkg.name) : path.basename(input)
-    const expectedPath = path.join(expectedRoot, 'by-arch', arch, 'app', output)
-    await new Localdrive(path.join(fixtureDir, input)).mirror(new Localdrive(expectedPath)).done()
+  for (const { arch, app } of outputs) {
+    const expectedPath = path.join(expectedRoot, 'by-arch', arch, 'app')
+    await new Localdrive(path.dirname(app))
+      .mirror(new Localdrive(expectedPath), { prefix: '/' + path.basename(app) })
+      .done()
   }
 
   const mirror = new MirrorDrive(expected, new Localdrive(target), {
