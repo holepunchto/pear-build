@@ -52,25 +52,25 @@ test('mobile: build outputs expected deploy directory', async function (t) {
     {
       arch: 'ios-arm64',
       flag: 'iosArm64',
-      input: path.join('dist', 'by-arch', 'ios-arm64', 'app', 'app.bundle'),
+      input: path.join('dist', 'by-arch', 'ios-arm64', 'app', 'HelloPearReactNative'),
       output: 'HelloPearReactNative'
     },
     {
       arch: 'ios-arm64-simulator',
       flag: 'iosArm64Simulator',
-      input: path.join('dist', 'by-arch', 'ios-arm64-simulator', 'app', 'app.bundle'),
+      input: path.join('dist', 'by-arch', 'ios-arm64-simulator', 'app', 'HelloPearReactNative'),
       output: 'HelloPearReactNative'
     },
     {
       arch: 'ios-x64-simulator',
       flag: 'iosX64Simulator',
-      input: path.join('dist', 'by-arch', 'ios-x64-simulator', 'app', 'app.bundle'),
+      input: path.join('dist', 'by-arch', 'ios-x64-simulator', 'app', 'HelloPearReactNative'),
       output: 'HelloPearReactNative'
     },
     {
       arch: 'android-arm64',
       flag: 'androidArm64',
-      input: path.join('dist', 'by-arch', 'android-arm64', 'app', 'app.bundle'),
+      input: path.join('dist', 'by-arch', 'android-arm64', 'app', 'HelloPearReactNative'),
       output: 'HelloPearReactNative'
     }
   ]
