@@ -9,7 +9,7 @@ const build = require('../index')
 const desktopDir = path.join(__dirname, 'fixtures', 'hello-pear-electron')
 const mobileDir = path.join(__dirname, 'fixtures', 'hello-pear-react-native')
 
-test('darwin: build deploy directory', async function (t) {
+test('darwin: deploy directory', async function (t) {
   t.plan(3)
   const out = await tmp()
   const src = new Localdrive(desktopDir)
@@ -46,7 +46,7 @@ test('darwin: build deploy directory', async function (t) {
   t.is(mirror.count.change, 0)
 })
 
-test('linux: build deploy directory', async function (t) {
+test('linux: deploy directory', async function (t) {
   t.plan(3)
   const out = await tmp()
   const src = new Localdrive(desktopDir)
@@ -83,7 +83,7 @@ test('linux: build deploy directory', async function (t) {
   t.is(mirror.count.change, 0)
 })
 
-test('win32: build deploy directory', async function (t) {
+test('win32: deploy directory', async function (t) {
   t.plan(3)
   const out = await tmp()
   const src = new Localdrive(desktopDir)
@@ -115,7 +115,7 @@ test('win32: build deploy directory', async function (t) {
   t.is(mirror.count.change, 0)
 })
 
-test('ios: build deploy directory', async function (t) {
+test('ios: deploy directory', async function (t) {
   t.plan(3)
   const out = await tmp()
   const src = new Localdrive(mobileDir)
@@ -154,7 +154,7 @@ test('ios: build deploy directory', async function (t) {
   t.is(mirror.count.change, 0)
 })
 
-test('android: build deploy directory', async function (t) {
+test('android: deploy directory', async function (t) {
   t.plan(3)
   const out = await tmp()
   const src = new Localdrive(mobileDir)
