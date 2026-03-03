@@ -1,5 +1,8 @@
 {
   "name": "hello-pear-react-native",
   "productName": "HelloPearReactNative",
-  "version": "1.0.1"
+  "version": "1.0.1",
+  "author": "Holepunch Inc",
+  "description": "Example app",
+  "license": "Apache-2.0"
 }
