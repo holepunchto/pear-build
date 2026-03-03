@@ -21,7 +21,7 @@ test('desktop: build expected deploy directory', async function (t) {
   const darwinX64App = path.join(desktopDir, 'out', 'HelloPear-darwin-x64', 'HelloPear.app')
   const linuxArm64App = path.join(desktopDir, 'out', 'HelloPear-linux-arm64', 'HelloPear.AppImage')
   const linuxX64App = path.join(desktopDir, 'out', 'HelloPear-linux-x64', 'HelloPear.AppImage')
-  const win32X64App = path.join(desktopDir, 'out', 'HelloPear-win32-x64', 'HelloPear.exe')
+  const win32X64App = path.join(desktopDir, 'out', 'make', 'msix', 'x64', 'HelloPear.msix')
 
   const targets = [
     ['darwin-arm64', darwinArm64App],
