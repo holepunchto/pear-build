@@ -6,118 +6,103 @@ const Localdrive = require('localdrive')
 const MirrorDrive = require('mirror-drive')
 const build = require('../index')
 
-const desktopFixtureDir = path.join(__dirname, 'fixtures', 'hello-pear-electron')
-const mobileFixtureDir = path.join(__dirname, 'fixtures', 'hello-pear-react-native')
+const desktopDir = path.join(__dirname, 'fixtures', 'hello-pear-electron')
+const mobileDir = path.join(__dirname, 'fixtures', 'hello-pear-react-native')
 
-test('desktop: build outputs expected deploy directory', async function (t) {
-  const targets = [
-    {
-      arch: 'darwin-arm64',
-      flag: 'darwinArm64App',
-      input: path.join('out', 'HelloPear-darwin-arm64', 'HelloPear.app')
-    },
-    {
-      arch: 'darwin-x64',
-      flag: 'darwinX64App',
-      input: path.join('out', 'HelloPear-darwin-x64', 'HelloPear.app')
-    },
-    {
-      arch: 'linux-arm64',
-      flag: 'linuxArm64App',
-      input: path.join('out', 'HelloPear-linux-arm64', 'HelloPear.AppImage')
-    },
-    {
-      arch: 'linux-x64',
-      flag: 'linuxX64App',
-      input: path.join('out', 'HelloPear-linux-x64', 'HelloPear.AppImage')
-    },
-    {
-      arch: 'win32-x64',
-      flag: 'win32X64App',
-      input: path.join('out', 'HelloPear-win32-x64', 'HelloPear.exe')
-    }
-  ]
+test('desktop: build expected deploy directory', async function (t) {
+  const out = await tmp()
+  const src = new Localdrive(desktopDir)
+  const buf = await src.get('/package.json')
+  const target = path.join(out, 'build')
+  const expected = new Localdrive(path.join(out, 'expected'))
 
-  await compareBuild(t, desktopFixtureDir, targets)
-})
+  const darwinArm64App = path.join(desktopDir, 'out', 'HelloPear-darwin-arm64', 'HelloPear.app')
+  const darwinX64App = path.join(desktopDir, 'out', 'HelloPear-darwin-x64', 'HelloPear.app')
+  const linuxArm64App = path.join(desktopDir, 'out', 'HelloPear-linux-arm64', 'HelloPear.AppImage')
+  const linuxX64App = path.join(desktopDir, 'out', 'HelloPear-linux-x64', 'HelloPear.AppImage')
+  const win32X64App = path.join(desktopDir, 'out', 'HelloPear-win32-x64', 'HelloPear.exe')
 
-test('mobile: build outputs expected deploy directory', async function (t) {
-  const iosBundle = path.join('ota', 'ios', 'app.bundle')
-  const androidBundle = path.join('ota', 'android', 'app.bundle')
-  const targets = [
-    {
-      arch: 'ios-arm64',
-      flag: 'iosArm64',
-      input: iosBundle
-    },
-    {
-      arch: 'ios-arm64-simulator',
-      flag: 'iosArm64Simulator',
-      input: iosBundle
-    },
-    {
-      arch: 'ios-x64-simulator',
-      flag: 'iosX64Simulator',
-      input: iosBundle
-    },
-    {
-      arch: 'android-arm64',
-      flag: 'androidArm64',
-      input: androidBundle
-    }
-  ]
-
-  await compareBuild(t, mobileFixtureDir, targets)
-})
-
-async function compareBuild(t, fixtureDir, targets) {
-  const tmpdir = await tmp()
-  const target = path.join(tmpdir, 'my-build')
-  const expectedRoot = path.join(tmpdir, 'expected-build')
-  const fixture = new Localdrive(fixtureDir)
-  const expected = new Localdrive(expectedRoot)
-  const pkgPath = path.join(fixtureDir, 'package.json')
-  const pkgBuffer = await fixture.get('/package.json')
-  const pkg = JSON.parse(pkgBuffer)
-  const appName = pkg.productName ?? pkg.name
-  const opts = { target }
-  const outputs = []
-
-  for (const { arch, flag, input } of targets) {
-    const isMobile = arch.startsWith('ios') || arch.startsWith('android')
-    let app = path.join(fixtureDir, input)
-
-    if (isMobile) {
-      const ext = path.extname(input)
-      const stageDir = path.join(tmpdir, 'staged-inputs', flag)
-      app = path.join(stageDir, appName + ext)
-      await new Localdrive(stageDir).put(
-        '/' + path.basename(app),
-        await fixture.get('/' + input.split(path.sep).join('/'))
-      )
-    }
-
-    opts[flag] = app
-    outputs.push({ arch, app })
-  }
-
-  await build(pkgPath, opts)
-  await expected.put('/package.json', pkgBuffer)
-
-  for (const { arch, app } of outputs) {
-    const expectedPath = path.join(expectedRoot, 'by-arch', arch, 'app')
-    await new Localdrive(path.dirname(app))
-      .mirror(new Localdrive(expectedPath), { prefix: '/' + path.basename(app) })
-      .done()
-  }
-
-  const mirror = new MirrorDrive(expected, new Localdrive(target), {
-    dryRun: true,
-    ignore: '.DS_Store'
+  await build(path.join(desktopDir, 'package.json'), {
+    target,
+    darwinArm64App,
+    darwinX64App,
+    linuxArm64App,
+    linuxX64App,
+    win32X64App
   })
 
+  const targets = [
+    ['darwin-arm64', darwinArm64App],
+    ['darwin-x64', darwinX64App],
+    ['linux-arm64', linuxArm64App],
+    ['linux-x64', linuxX64App],
+    ['win32-x64', win32X64App]
+  ]
+
+  await expected.put('/package.json', buf)
+  for (const [arch, app] of targets) {
+    await new Localdrive(path.dirname(app))
+      .mirror(new Localdrive(path.join(expected.root, 'by-arch', arch, 'app')), {
+        prefix: '/' + path.basename(app)
+      })
+      .done()
+  }
+  const mirror = new MirrorDrive(expected, new Localdrive(target), { dryRun: true })
   await mirror.done()
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
-}
+})
+
+test('mobile: build expected deploy directory', async function (t) {
+  const out = await tmp()
+  const src = new Localdrive(mobileDir)
+  const buf = await src.get('/package.json')
+  const meta = JSON.parse(buf)
+  const name = (meta.productName ?? meta.name) + '.bundle'
+  const target = path.join(out, 'build')
+  const expected = new Localdrive(path.join(out, 'expected'))
+
+  // Note: react native creates architecture-agnostic bundles
+  const iosArm64 = path.join(out, 'inputs', 'ios', name)
+  const iosArm64Simulator = iosArm64
+  const iosX64Simulator = iosArm64
+  const androidArm64 = path.join(out, 'inputs', 'android', name)
+  const targets = [
+    ['ios-arm64', iosArm64],
+    ['ios-arm64-simulator', iosArm64Simulator],
+    ['ios-x64-simulator', iosX64Simulator],
+    ['android-arm64', androidArm64]
+  ]
+
+  await new Localdrive(path.dirname(iosArm64)).put(
+    '/' + path.basename(iosArm64),
+    await src.get('/ota/ios/app.bundle')
+  )
+  await new Localdrive(path.dirname(androidArm64)).put(
+    '/' + path.basename(androidArm64),
+    await src.get('/ota/android/app.bundle')
+  )
+
+  await build(path.join(mobileDir, 'package.json'), {
+    target,
+    iosArm64,
+    iosArm64Simulator,
+    iosX64Simulator,
+    androidArm64
+  })
+
+  await expected.put('/package.json', buf)
+  for (const [arch, app] of targets) {
+    await new Localdrive(path.dirname(app))
+      .mirror(new Localdrive(path.join(expected.root, 'by-arch', arch, 'app')), {
+        prefix: '/' + path.basename(app)
+      })
+      .done()
+  }
+  const mirror = new MirrorDrive(expected, new Localdrive(target), { dryRun: true })
+  await mirror.done()
+  t.is(mirror.count.add, 0)
+  t.is(mirror.count.remove, 0)
+  t.is(mirror.count.change, 0)
+})
