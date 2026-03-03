@@ -120,12 +120,10 @@ test('ios: build deploy directory', async function (t) {
   const out = await tmp()
   const src = new Localdrive(mobileDir)
   const pkg = await src.get('/package.json')
-  const { productName, name } = JSON.parse(pkg.toString())
-  const bundleName = (productName ?? name) + '.bundle'
   const target = path.join(out, 'build')
   const expected = new Localdrive(path.join(out, 'expected'))
 
-  const iosArm64 = path.join(out, 'inputs', 'ios', bundleName)
+  const iosArm64 = path.join(mobileDir, 'ota', 'ios', 'HelloPear')
   const iosArm64Simulator = iosArm64
   const iosX64Simulator = iosArm64
   const targets = [
@@ -133,11 +131,6 @@ test('ios: build deploy directory', async function (t) {
     ['ios-arm64-simulator', iosArm64Simulator],
     ['ios-x64-simulator', iosX64Simulator]
   ]
-
-  await new Localdrive(path.dirname(iosArm64)).put(
-    '/' + path.basename(iosArm64),
-    await src.get('/ota/ios/app.bundle')
-  )
 
   await build(path.join(mobileDir, 'package.json'), {
     target,
@@ -166,18 +159,11 @@ test('android: build deploy directory', async function (t) {
   const out = await tmp()
   const src = new Localdrive(mobileDir)
   const pkg = await src.get('/package.json')
-  const { productName, name } = JSON.parse(pkg.toString())
-  const bundleName = (productName ?? name) + '.bundle'
   const target = path.join(out, 'build')
   const expected = new Localdrive(path.join(out, 'expected'))
 
-  const androidArm64 = path.join(out, 'inputs', 'android', bundleName)
+  const androidArm64 = path.join(mobileDir, 'ota', 'android', 'HelloPear')
   const targets = [['android-arm64', androidArm64]]
-
-  await new Localdrive(path.dirname(androidArm64)).put(
-    '/' + path.basename(androidArm64),
-    await src.get('/ota/android/app.bundle')
-  )
 
   await build(path.join(mobileDir, 'package.json'), {
     target,
