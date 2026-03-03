@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { command, flag, summary } = require('paparam')
+const { command, flag, summary, argv } = require('paparam')
 const pkg = require('./package')
 const build = require('.')
 
@@ -45,4 +45,4 @@ const cmd = command(
   }
 )
 
-cmd.parse()
+cmd.parse(argv().length === 0 ? ['--help'] : argv())
