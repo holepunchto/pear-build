@@ -35,6 +35,7 @@
   "devDependencies": {
     "brittle": "^3.19.1",
     "lunte": "^1.6.0",
+    "mirror-drive": "^1.13.0",
     "prettier": "^3.7.4",
     "prettier-config-holepunch": "^2.0.0",
     "test-tmp": "^1.4.0"
