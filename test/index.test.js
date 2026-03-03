@@ -10,6 +10,7 @@ const desktopDir = path.join(__dirname, 'fixtures', 'hello-pear-electron')
 const mobileDir = path.join(__dirname, 'fixtures', 'hello-pear-react-native')
 
 test('desktop: build expected deploy directory', async function (t) {
+  t.plan(3)
   const out = await tmp()
   const src = new Localdrive(desktopDir)
   const buf = await src.get('/package.json')
@@ -22,6 +23,14 @@ test('desktop: build expected deploy directory', async function (t) {
   const linuxX64App = path.join(desktopDir, 'out', 'HelloPear-linux-x64', 'HelloPear.AppImage')
   const win32X64App = path.join(desktopDir, 'out', 'HelloPear-win32-x64', 'HelloPear.exe')
 
+  const targets = [
+    ['darwin-arm64', darwinArm64App],
+    ['darwin-x64', darwinX64App],
+    ['linux-arm64', linuxArm64App],
+    ['linux-x64', linuxX64App],
+    ['win32-x64', win32X64App]
+  ]
+
   await build(path.join(desktopDir, 'package.json'), {
     target,
     darwinArm64App,
@@ -30,14 +39,6 @@ test('desktop: build expected deploy directory', async function (t) {
     linuxX64App,
     win32X64App
   })
-
-  const targets = [
-    ['darwin-arm64', darwinArm64App],
-    ['darwin-x64', darwinX64App],
-    ['linux-arm64', linuxArm64App],
-    ['linux-x64', linuxX64App],
-    ['win32-x64', win32X64App]
-  ]
 
   await expected.put('/package.json', buf)
   for (const [arch, app] of targets) {
@@ -55,10 +56,11 @@ test('desktop: build expected deploy directory', async function (t) {
 })
 
 test('mobile: build expected deploy directory', async function (t) {
+  t.plan(3)
   const out = await tmp()
   const src = new Localdrive(mobileDir)
   const buf = await src.get('/package.json')
-  const meta = JSON.parse(buf)
+  const meta = JSON.parse(buf.toString())
   const name = (meta.productName ?? meta.name) + '.bundle'
   const target = path.join(out, 'build')
   const expected = new Localdrive(path.join(out, 'expected'))
