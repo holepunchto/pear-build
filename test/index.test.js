@@ -10,7 +10,7 @@ const desktopDir = path.join(__dirname, 'fixtures', 'hello-pear-electron')
 const mobileDir = path.join(__dirname, 'fixtures', 'hello-pear-react-native')
 
 test('darwin: deploy directory', async function (t) {
-  t.plan(3)
+  t.plan(4)
   const out = await tmp()
   const src = new Localdrive(desktopDir)
   const pkg = await src.get('/package.json')
@@ -41,13 +41,14 @@ test('darwin: deploy directory', async function (t) {
   }
   const mirror = new MirrorDrive(expected, new Localdrive(target), { dryRun: true })
   await mirror.done()
+  t.is(mirror.count.files, 3)
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
 })
 
 test('linux: deploy directory', async function (t) {
-  t.plan(3)
+  t.plan(4)
   const out = await tmp()
   const src = new Localdrive(desktopDir)
   const pkg = await src.get('/package.json')
@@ -78,20 +79,21 @@ test('linux: deploy directory', async function (t) {
   }
   const mirror = new MirrorDrive(expected, new Localdrive(target), { dryRun: true })
   await mirror.done()
+  t.is(mirror.count.files, 3)
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
 })
 
 test('win32: deploy directory', async function (t) {
-  t.plan(3)
+  t.plan(4)
   const out = await tmp()
   const src = new Localdrive(desktopDir)
   const pkg = await src.get('/package.json')
   const target = path.join(out, 'build')
   const expected = new Localdrive(path.join(out, 'expected'))
 
-  const win32X64App = path.join(desktopDir, 'out', 'make', 'msix', 'x64', 'HelloPear.msix')
+  const win32X64App = path.join(desktopDir, 'out', 'HelloPear-win32-x64', 'HelloPear.msix')
 
   const targets = [['win32-x64', win32X64App]]
 
@@ -110,13 +112,14 @@ test('win32: deploy directory', async function (t) {
   }
   const mirror = new MirrorDrive(expected, new Localdrive(target), { dryRun: true })
   await mirror.done()
+  t.is(mirror.count.files, 2)
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
 })
 
 test('ios: deploy directory', async function (t) {
-  t.plan(3)
+  t.plan(4)
   const out = await tmp()
   const src = new Localdrive(mobileDir)
   const pkg = await src.get('/package.json')
@@ -149,13 +152,14 @@ test('ios: deploy directory', async function (t) {
   }
   const mirror = new MirrorDrive(expected, new Localdrive(target), { dryRun: true })
   await mirror.done()
+  t.is(mirror.count.files, 4)
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
 })
 
 test('android: deploy directory', async function (t) {
-  t.plan(3)
+  t.plan(4)
   const out = await tmp()
   const src = new Localdrive(mobileDir)
   const pkg = await src.get('/package.json')
@@ -180,6 +184,7 @@ test('android: deploy directory', async function (t) {
   }
   const mirror = new MirrorDrive(expected, new Localdrive(target), { dryRun: true })
   await mirror.done()
+  t.is(mirror.count.files, 2)
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
