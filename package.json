@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "commonjs",
   "bin": "bin.js",
-  "description": "Build appling for a Pear application",
+  "description": "Assemble project deployment folder",
   "author": "Holepunch Inc",
   "license": "Apache-2.0",
   "files": [
