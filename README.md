@@ -27,7 +27,7 @@ node bin.js \
     --darwin-x64-app ./test/fixtures/hello-pear-electron/out/HelloPear-darwin-x64/HelloPear.app \
     --linux-arm64-app ./test/fixtures/hello-pear-electron/out/HelloPear-linux-arm64/HelloPear.AppImage \
     --linux-x64-app ./test/fixtures/hello-pear-electron/out/HelloPear-linux-x64/HelloPear.AppImage \
-    --win32-x64-app ./test/fixtures/hello-pear-electron/out/make/msix/x64/HelloPear.msix \
+    --win32-x64-app ./test/fixtures/hello-pear-electron/out/HelloPear-win32-x64/HelloPear.msix \
     --ios-arm64 ./test/fixtures/hello-pear-react-native/ota/ios/HelloPear \
     --ios-arm64-simulator ./test/fixtures/hello-pear-react-native/ota/ios/HelloPear \
     --ios-x64-simulator ./test/fixtures/hello-pear-react-native/ota/ios/HelloPear \
