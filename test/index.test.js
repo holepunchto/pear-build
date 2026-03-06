@@ -83,7 +83,7 @@ test('linux: deploy directory', async function (t) {
   t.is(mirror.count.files, 3)
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
-  t.is(mirror.count.change, 2) // chmod +x
+  t.is(mirror.count.change, 0)
 })
 
 test('linux: executable permission', async function (t) {
