@@ -49,7 +49,6 @@ module.exports = async function build(dir, opts = {}) {
 
   const noop = () => {}
   const promises = []
-  const chmod = []
   for (const [arch, app] of apps) {
     if (path.basename(app, path.extname(app)) !== appName) {
       throw new Error(`expected directory ${appName} but got ${path.basename(app)} for ${arch}`)
@@ -69,10 +68,7 @@ module.exports = async function build(dir, opts = {}) {
     promise.then(() => console.log(app, 'mirrored to', archApp), noop)
     await src.close()
     await dst.close()
-
-    if (arch.startsWith('linux-')) chmod.push(path.join(archApp, path.basename(app)))
   }
 
   await Promise.all(promises)
-  await Promise.all(chmod.map((target) => fs.promises.chmod(target, 0o744)))
 }
