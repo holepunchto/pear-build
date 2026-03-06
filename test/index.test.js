@@ -86,42 +86,57 @@ test('linux: deploy directory', async function (t) {
   t.is(mirror.count.change, 0)
 })
 
-test('linux: preserve executable permissions', async function (t) {
-  t.plan(1)
+test('linux: executable permission is set', async function (t) {
+  t.plan(4)
   const out = await tmp()
   const target = path.join(out, 'build')
+  const execFlag = fs.constants.S_IXUSR
   const linuxArm64App = path.join(desktopDir, 'out', 'HelloPear-linux-arm64', 'HelloPear.AppImage')
+  const linuxX64App = path.join(desktopDir, 'out', 'HelloPear-linux-x64', 'HelloPear.AppImage')
+  let statArm64 = await fs.promises.stat(linuxArm64App)
+  let statX64 = await fs.promises.stat(linuxX64App)
+  t.is(statArm64.mode & execFlag, 0)
+  t.is(statX64.mode & execFlag, 0)
 
   await build(path.join(desktopDir, 'package.json'), {
     target,
-    linuxArm64App
+    linuxArm64App,
+    linuxX64App
   })
-
-  const output = path.join(target, 'by-arch', 'linux-arm64', 'app', path.basename(linuxArm64App))
-  const sourceStat = await fs.promises.stat(linuxArm64App)
-  const outputStat = await fs.promises.stat(output)
-
-  t.is(outputStat.mode, sourceStat.mode)
+  const outputArm64 = path.join(target, `by-arch/linux-arm64/app/${path.basename(linuxArm64App)}`)
+  const outputX64 = path.join(target, `by-arch/linux-x64/app/${path.basename(linuxX64App)}`)
+  statArm64 = await fs.promises.stat(outputArm64)
+  statX64 = await fs.promises.stat(outputX64)
+  t.is(statArm64.mode & execFlag, execFlag)
+  t.is(statX64.mode & execFlag, execFlag)
 })
 
-test('darwin: preserve executable permissions', async function (t) {
-  t.plan(1)
+test('darwin: executable permission is set', async function (t) {
+  t.plan(4)
   const out = await tmp()
   const target = path.join(out, 'build')
+  const execFlag = fs.constants.S_IXUSR
   const darwinArm64App = path.join(desktopDir, 'out', 'HelloPear-darwin-arm64', 'HelloPear.app')
+  const darwinX64App = path.join(desktopDir, 'out', 'HelloPear-darwin-x64', 'HelloPear.app')
+  const executable = path.join('Contents', 'MacOS', 'HelloPear')
+  const inputArm64 = path.join(darwinArm64App, executable)
+  const inputX64 = path.join(darwinX64App, executable)
+  let statArm64 = await fs.promises.stat(inputArm64)
+  let statX64 = await fs.promises.stat(inputX64)
+  t.is(statArm64.mode & execFlag, 0)
+  t.is(statX64.mode & execFlag, 0)
 
   await build(path.join(desktopDir, 'package.json'), {
     target,
-    darwinArm64App
+    darwinArm64App,
+    darwinX64App
   })
-
-  const executable = path.join('Contents', 'MacOS', 'HelloPear')
-  const source = path.join(darwinArm64App, executable)
-  const output = path.join(target, 'by-arch', 'darwin-arm64', 'app', 'HelloPear.app', executable)
-  const sourceStat = await fs.promises.stat(source)
-  const outputStat = await fs.promises.stat(output)
-
-  t.is(outputStat.mode, sourceStat.mode)
+  const outputArm64 = path.join(target, `by-arch/darwin-arm64/app/HelloPear.app/${executable}`)
+  const outputX64 = path.join(target, `by-arch/darwin-x64/app/HelloPear.app/${executable}`)
+  statArm64 = await fs.promises.stat(outputArm64)
+  statX64 = await fs.promises.stat(outputX64)
+  t.is(statArm64.mode & execFlag, execFlag)
+  t.is(statX64.mode & execFlag, execFlag)
 })
 
 test('win32: deploy directory', async function (t) {
