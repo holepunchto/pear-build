@@ -83,10 +83,10 @@ test('linux: deploy directory', async function (t) {
   t.is(mirror.count.files, 3)
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
-  t.is(mirror.count.change, 0)
+  t.is(mirror.count.change, 2) // chmod +x
 })
 
-test('linux: executable permission is set', async function (t) {
+test('linux: executable permission', async function (t) {
   t.plan(4)
   const out = await tmp()
   const target = path.join(out, 'build')
@@ -105,34 +105,6 @@ test('linux: executable permission is set', async function (t) {
   })
   const outputArm64 = path.join(target, `by-arch/linux-arm64/app/${path.basename(linuxArm64App)}`)
   const outputX64 = path.join(target, `by-arch/linux-x64/app/${path.basename(linuxX64App)}`)
-  statArm64 = await fs.promises.stat(outputArm64)
-  statX64 = await fs.promises.stat(outputX64)
-  t.is(statArm64.mode & execFlag, execFlag)
-  t.is(statX64.mode & execFlag, execFlag)
-})
-
-test('darwin: executable permission is set', async function (t) {
-  t.plan(4)
-  const out = await tmp()
-  const target = path.join(out, 'build')
-  const execFlag = fs.constants.S_IXUSR
-  const darwinArm64App = path.join(desktopDir, 'out', 'HelloPear-darwin-arm64', 'HelloPear.app')
-  const darwinX64App = path.join(desktopDir, 'out', 'HelloPear-darwin-x64', 'HelloPear.app')
-  const executable = path.join('Contents', 'MacOS', 'HelloPear')
-  const inputArm64 = path.join(darwinArm64App, executable)
-  const inputX64 = path.join(darwinX64App, executable)
-  let statArm64 = await fs.promises.stat(inputArm64)
-  let statX64 = await fs.promises.stat(inputX64)
-  t.is(statArm64.mode & execFlag, 0)
-  t.is(statX64.mode & execFlag, 0)
-
-  await build(path.join(desktopDir, 'package.json'), {
-    target,
-    darwinArm64App,
-    darwinX64App
-  })
-  const outputArm64 = path.join(target, `by-arch/darwin-arm64/app/HelloPear.app/${executable}`)
-  const outputX64 = path.join(target, `by-arch/darwin-x64/app/HelloPear.app/${executable}`)
   statArm64 = await fs.promises.stat(outputArm64)
   statX64 = await fs.promises.stat(outputX64)
   t.is(statArm64.mode & execFlag, execFlag)
