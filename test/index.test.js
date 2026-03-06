@@ -1,5 +1,6 @@
 'use strict'
 const path = require('path')
+const fs = require('fs')
 const test = require('brittle')
 const tmp = require('test-tmp')
 const Localdrive = require('localdrive')
@@ -83,6 +84,44 @@ test('linux: deploy directory', async function (t) {
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
+})
+
+test('linux: preserve executable permissions', async function (t) {
+  t.plan(1)
+  const out = await tmp()
+  const target = path.join(out, 'build')
+  const linuxArm64App = path.join(desktopDir, 'out', 'HelloPear-linux-arm64', 'HelloPear.AppImage')
+
+  await build(path.join(desktopDir, 'package.json'), {
+    target,
+    linuxArm64App
+  })
+
+  const output = path.join(target, 'by-arch', 'linux-arm64', 'app', path.basename(linuxArm64App))
+  const sourceStat = await fs.promises.stat(linuxArm64App)
+  const outputStat = await fs.promises.stat(output)
+
+  t.is(outputStat.mode, sourceStat.mode)
+})
+
+test('darwin: preserve executable permissions', async function (t) {
+  t.plan(1)
+  const out = await tmp()
+  const target = path.join(out, 'build')
+  const darwinArm64App = path.join(desktopDir, 'out', 'HelloPear-darwin-arm64', 'HelloPear.app')
+
+  await build(path.join(desktopDir, 'package.json'), {
+    target,
+    darwinArm64App
+  })
+
+  const executable = path.join('Contents', 'MacOS', 'HelloPear')
+  const source = path.join(darwinArm64App, executable)
+  const output = path.join(target, 'by-arch', 'darwin-arm64', 'app', 'HelloPear.app', executable)
+  const sourceStat = await fs.promises.stat(source)
+  const outputStat = await fs.promises.stat(output)
+
+  t.is(outputStat.mode, sourceStat.mode)
 })
 
 test('win32: deploy directory', async function (t) {
