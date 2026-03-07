@@ -98,17 +98,13 @@ test('linux: preserve executable permissions', async function (t) {
     linuxArm64App,
     linuxX64App
   })
-  const linuxArm64AppOut = path.join(
-    target,
-    'by-arch/linux-arm64/app',
-    path.basename(linuxArm64App)
-  )
-  const linuxX86AppOut = path.join(target, 'by-arch/linux-x64/app', path.basename(linuxX64App))
+  const linuxArm64Out = path.join(target, 'by-arch/linux-arm64/app', path.basename(linuxArm64App))
+  const linuxX86Out = path.join(target, 'by-arch/linux-x64/app', path.basename(linuxX64App))
 
   const inputArm64 = await fs.promises.stat(linuxArm64App)
   const inputX86 = await fs.promises.stat(linuxX64App)
-  const outputArm64 = await fs.promises.stat(linuxArm64AppOut)
-  const outputX86 = await fs.promises.stat(linuxX86AppOut)
+  const outputArm64 = await fs.promises.stat(linuxArm64Out)
+  const outputX86 = await fs.promises.stat(linuxX86Out)
 
   t.is(inputArm64.mode, outputArm64.mode)
   t.is(inputX86.mode, outputX86.mode)
