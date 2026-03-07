@@ -86,29 +86,32 @@ test('linux: deploy directory', async function (t) {
   t.is(mirror.count.change, 0)
 })
 
-test('linux: executable permission', async function (t) {
-  t.plan(4)
+test('linux: preserve executable permissions', async function (t) {
+  t.plan(2)
   const out = await tmp()
   const target = path.join(out, 'build')
-  const execFlag = fs.constants.S_IXUSR
   const linuxArm64App = path.join(desktopDir, 'out', 'HelloPear-linux-arm64', 'HelloPear.AppImage')
   const linuxX64App = path.join(desktopDir, 'out', 'HelloPear-linux-x64', 'HelloPear.AppImage')
-  let statArm64 = await fs.promises.stat(linuxArm64App)
-  let statX64 = await fs.promises.stat(linuxX64App)
-  t.is(statArm64.mode & execFlag, 0)
-  t.is(statX64.mode & execFlag, 0)
 
   await build(path.join(desktopDir, 'package.json'), {
     target,
     linuxArm64App,
     linuxX64App
   })
-  const outputArm64 = path.join(target, `by-arch/linux-arm64/app/${path.basename(linuxArm64App)}`)
-  const outputX64 = path.join(target, `by-arch/linux-x64/app/${path.basename(linuxX64App)}`)
-  statArm64 = await fs.promises.stat(outputArm64)
-  statX64 = await fs.promises.stat(outputX64)
-  t.is(statArm64.mode & execFlag, execFlag)
-  t.is(statX64.mode & execFlag, execFlag)
+  const linuxArm64AppOut = path.join(
+    target,
+    'by-arch/linux-arm64/app',
+    path.basename(linuxArm64App)
+  )
+  const linuxX86AppOut = path.join(target, 'by-arch/linux-x64/app', path.basename(linuxX64App))
+
+  const inputArm64 = await fs.promises.stat(linuxArm64App)
+  const inputX86 = await fs.promises.stat(linuxX64App)
+  const outputArm64 = await fs.promises.stat(linuxArm64AppOut)
+  const outputX86 = await fs.promises.stat(linuxX86AppOut)
+
+  t.is(inputArm64.mode, outputArm64.mode)
+  t.is(inputX86.mode, outputX86.mode)
 })
 
 test('win32: deploy directory', async function (t) {
