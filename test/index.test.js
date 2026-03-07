@@ -1,5 +1,6 @@
 'use strict'
 const path = require('path')
+const fs = require('fs')
 const test = require('brittle')
 const tmp = require('test-tmp')
 const Localdrive = require('localdrive')
@@ -83,6 +84,30 @@ test('linux: deploy directory', async function (t) {
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
+})
+
+test('linux: preserve executable permissions', async function (t) {
+  t.plan(2)
+  const out = await tmp()
+  const target = path.join(out, 'build')
+  const linuxArm64App = path.join(desktopDir, 'out', 'HelloPear-linux-arm64', 'HelloPear.AppImage')
+  const linuxX64App = path.join(desktopDir, 'out', 'HelloPear-linux-x64', 'HelloPear.AppImage')
+
+  await build(path.join(desktopDir, 'package.json'), {
+    target,
+    linuxArm64App,
+    linuxX64App
+  })
+  const linuxArm64Out = path.join(target, 'by-arch/linux-arm64/app', path.basename(linuxArm64App))
+  const linuxX86Out = path.join(target, 'by-arch/linux-x64/app', path.basename(linuxX64App))
+
+  const inputArm64 = await fs.promises.stat(linuxArm64App)
+  const inputX86 = await fs.promises.stat(linuxX64App)
+  const outputArm64 = await fs.promises.stat(linuxArm64Out)
+  const outputX86 = await fs.promises.stat(linuxX86Out)
+
+  t.is(inputArm64.mode, outputArm64.mode)
+  t.is(inputX86.mode, outputX86.mode)
 })
 
 test('win32: deploy directory', async function (t) {
