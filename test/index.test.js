@@ -95,7 +95,8 @@ test('linux: preserve executable permissions', async function (t) {
   const linuxArm64App = path.join(desktopDir, 'out', 'HelloPear-linux-arm64', 'HelloPear.AppImage')
   const linuxX64App = path.join(desktopDir, 'out', 'HelloPear-linux-x64', 'HelloPear.AppImage')
 
-  await build(path.join(desktopDir, 'package.json'), {
+  await build({
+    package: path.join(desktopDir, 'package.json'),
     target,
     linuxArm64App,
     linuxX64App
