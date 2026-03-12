@@ -27,19 +27,21 @@
     "flag --json": "Newline delimited JSON output"
   },
   "imports": {
-    "path": {
-      "bare": "bare-path",
-      "default": "path"
-    },
     "fs": {
       "bare": "bare-fs",
       "default": "fs"
+    },
+    "path": {
+      "bare": "bare-path",
+      "default": "path"
     }
   },
   "scripts": {
     "format": "prettier --write .",
     "lint": "prettier --check . && lunte",
-    "test": "brittle-node test/all.js"
+    "test": "npm run test:node && npm run test:bare",
+    "test:bare": "brittle-bare --coverage test/all.js",
+    "test:node": "brittle-node --coverage test/all.js"
   },
   "dependencies": {
     "bare-fs": "^4.5.3",
@@ -50,6 +52,7 @@
     "pear-opwait": "^1.0.0"
   },
   "devDependencies": {
+    "bare-fs": "^4.5.3",
     "brittle": "^3.19.1",
     "lunte": "^1.6.0",
     "mirror-drive": "^1.13.0",
