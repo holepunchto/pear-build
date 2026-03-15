@@ -26,7 +26,8 @@ test('darwin: deploy directory', async function (t) {
     ['darwin-x64', darwinX64App]
   ]
 
-  await build(path.join(desktopDir, 'package.json'), {
+  await build({
+    package: path.join(desktopDir, 'package.json'),
     target,
     darwinArm64App,
     darwinX64App
@@ -64,7 +65,8 @@ test('linux: deploy directory', async function (t) {
     ['linux-x64', linuxX64App]
   ]
 
-  await build(path.join(desktopDir, 'package.json'), {
+  await build({
+    package: path.join(desktopDir, 'package.json'),
     target,
     linuxArm64App,
     linuxX64App
@@ -93,7 +95,8 @@ test('linux: preserve executable permissions', async function (t) {
   const linuxArm64App = path.join(desktopDir, 'out', 'HelloPear-linux-arm64', 'HelloPear.AppImage')
   const linuxX64App = path.join(desktopDir, 'out', 'HelloPear-linux-x64', 'HelloPear.AppImage')
 
-  await build(path.join(desktopDir, 'package.json'), {
+  await build({
+    package: path.join(desktopDir, 'package.json'),
     target,
     linuxArm64App,
     linuxX64App
@@ -122,7 +125,8 @@ test('win32: deploy directory', async function (t) {
 
   const targets = [['win32-x64', win32X64App]]
 
-  await build(path.join(desktopDir, 'package.json'), {
+  await build({
+    package: path.join(desktopDir, 'package.json'),
     target,
     win32X64App
   })
@@ -160,7 +164,8 @@ test('ios: deploy directory', async function (t) {
     ['ios-x64-simulator', iosX64Simulator]
   ]
 
-  await build(path.join(mobileDir, 'package.json'), {
+  await build({
+    package: path.join(mobileDir, 'package.json'),
     target,
     iosArm64,
     iosArm64Simulator,
@@ -194,7 +199,8 @@ test('android: deploy directory', async function (t) {
   const androidArm64 = path.join(mobileDir, 'ota', 'android', 'HelloPear')
   const targets = [['android-arm64', androidArm64]]
 
-  await build(path.join(mobileDir, 'package.json'), {
+  await build({
+    package: path.join(mobileDir, 'package.json'),
     target,
     androidArm64
   })
