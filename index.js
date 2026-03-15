@@ -1,16 +1,11 @@
 'use strict'
 const path = require('path')
 const fs = require('fs')
-const Opstream = require('pear-opstream')
-const opwait = require('pear-opwait')
+const { EventEmitter } = require('events')
 const Localdrive = require('localdrive')
 
-class Build extends Opstream {
-  constructor(...args) {
-    super((...args) => this.#op(...args), ...args)
-  }
-
-  async #op(opts) {
+class Build extends EventEmitter {
+  async run(opts) {
     const pkgPath = path.resolve(opts.package)
     const pkg = require(pkgPath)
     const { target = path.resolve(pkg.name + '-' + pkg.version) } = opts
@@ -72,12 +67,18 @@ class Build extends Opstream {
 
       await src.ready()
       await dst.ready()
-      this.push({ tag: 'mirroring', data: { message: 'mirroring to', from: app, to: archApp } })
+      this.emit('data', {
+        tag: 'mirroring',
+        data: { message: 'mirroring to', from: app, to: archApp }
+      })
       const promise = mirror.done()
       promises.push(promise)
       promise.then(
         () =>
-          this.push({ tag: 'mirrored', data: { message: 'mirrored to', from: app, to: archApp } }),
+          this.emit('data', {
+            tag: 'mirrored',
+            data: { message: 'mirrored to', from: app, to: archApp }
+          }),
         noop
       )
       await src.close()
@@ -89,7 +90,7 @@ class Build extends Opstream {
 }
 
 module.exports = function build(opts, status = () => {}) {
-  const stream = new Build(opts)
+  const stream = new Build()
   stream.on('data', status)
-  return opwait(stream)
+  return stream.run(opts)
 }

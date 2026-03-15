@@ -27,6 +27,10 @@
     "flag --json": "Newline delimited JSON output"
   },
   "imports": {
+    "events": {
+      "bare": "bare-events",
+      "default": "events"
+    },
     "fs": {
       "bare": "bare-fs",
       "default": "fs"
@@ -44,12 +48,11 @@
     "test:node": "brittle-node --coverage test/all.js"
   },
   "dependencies": {
+    "bare-events": "^3.0.0",
     "bare-fs": "^4.5.3",
     "bare-path": "^3.0.0",
     "localdrive": "^2.2.0",
-    "paparam": "^1.10.0",
-    "pear-opstream": "^1.0.1",
-    "pear-opwait": "^1.0.0"
+    "paparam": "^1.10.0"
   },
   "devDependencies": {
     "bare-fs": "^4.5.3",
