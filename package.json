@@ -48,7 +48,7 @@
     "test:node": "brittle-node --coverage test/all.js"
   },
   "dependencies": {
-    "bare-events": "^3.0.0",
+    "bare-events": "^2.8.2",
     "bare-fs": "^4.5.3",
     "bare-path": "^3.0.0",
     "localdrive": "^2.2.0",
