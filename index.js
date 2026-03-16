@@ -67,18 +67,11 @@ class Build extends EventEmitter {
 
       await src.ready()
       await dst.ready()
-      this.emit('data', {
-        tag: 'mirroring',
-        data: { message: 'mirroring to', from: app, to: archApp }
-      })
+      this.emit('mirroring', { message: 'mirroring to', from: app, to: archApp })
       const promise = mirror.done()
       promises.push(promise)
       promise.then(
-        () =>
-          this.emit('data', {
-            tag: 'mirrored',
-            data: { message: 'mirrored to', from: app, to: archApp }
-          }),
+        () => this.emit('mirrored', { message: 'mirrored to', from: app, to: archApp }),
         noop
       )
       await src.close()
