@@ -7,12 +7,10 @@ const cmd = command(pkg.name, pkg.command, async function (cmd) {
   if (cmd.flags.version) return console.log(`v${pkg.version}`)
   try {
     const runner = build(cmd.flags)
-    runner.on('mirroring', (data) => console.log(data.from, data.message, data.to))
     runner.on('mirrored', (data) => console.log(data.from, data.message, data.to))
-    runner.on('error', () => {})
+    runner.on('error', (err) => console.error(err))
     await runner.done()
   } catch (err) {
-    if (err) console.error(err)
     if (typeof Bare !== 'undefined') Bare.exitCode = 1
     else if (typeof process !== 'undefined') process.exitCode = 1
   }
