@@ -7,20 +7,8 @@ const Localdrive = require('localdrive')
 class Build extends EventEmitter {
   constructor(opts) {
     super()
-    this.opts = opts
-    this._running = this._run()
-    this._running.catch(() => {})
-  }
-
-  async _run() {
-    await new Promise((resolve) => queueMicrotask(resolve))
-
-    try {
-      return await this.run(this.opts)
-    } catch (err) {
-      this.emit('error', err)
-      throw err
-    }
+    this._running = this.run(opts)
+    this._running.catch((err) => this.emit('error', err))
   }
 
   async run(opts) {

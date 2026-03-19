@@ -6,7 +6,11 @@ const build = require('.')
 const cmd = command(pkg.name, pkg.command, async function (cmd) {
   if (cmd.flags.version) return console.log(`v${pkg.version}`)
   try {
-    await build(cmd.flags, ({ data }) => console.log(data.from, data.message, data.to))
+    const runner = build(cmd.flags)
+    runner.on('mirroring', (data) => console.log(data.from, data.message, data.to))
+    runner.on('mirrored', (data) => console.log(data.from, data.message, data.to))
+    runner.on('error', () => {})
+    await runner.done()
   } catch (err) {
     if (err) console.error(err)
     if (typeof Bare !== 'undefined') Bare.exitCode = 1
