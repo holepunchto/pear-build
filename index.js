@@ -5,6 +5,24 @@ const { EventEmitter } = require('events')
 const Localdrive = require('localdrive')
 
 class Build extends EventEmitter {
+  constructor(opts) {
+    super()
+    this.opts = opts
+    this._running = this._run()
+    this._running.catch(() => {})
+  }
+
+  async _run() {
+    await new Promise((resolve) => queueMicrotask(resolve))
+
+    try {
+      return await this.run(this.opts)
+    } catch (err) {
+      this.emit('error', err)
+      throw err
+    }
+  }
+
   async run(opts) {
     const pkgPath = path.resolve(opts.package)
     const pkg = require(pkgPath)
@@ -80,10 +98,12 @@ class Build extends EventEmitter {
 
     await Promise.all(promises)
   }
+
+  async done() {
+    return await this._running
+  }
 }
 
-module.exports = function build(opts, status = () => {}) {
-  const stream = new Build()
-  stream.on('data', status)
-  return stream.run(opts)
+module.exports = function build(opts) {
+  return new Build(opts)
 }
