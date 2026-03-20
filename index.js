@@ -24,7 +24,9 @@ class Build extends EventEmitter {
       : null
     const linuxX64App = opts.linuxX64App ? ['linux-x64', path.resolve(opts.linuxX64App)] : null
     const win32X64App = opts.win32X64App ? ['win32-x64', path.resolve(opts.win32X64App)] : null
-    const win32Arm64App = opts.win32Arm64App ? ['win32-arm64', path.resolve(opts.win32Arm64App)] : null
+    const win32Arm64App = opts.win32Arm64App
+      ? ['win32-arm64', path.resolve(opts.win32Arm64App)]
+      : null
     const iosArm64 = opts.iosArm64 ? ['ios-arm64', path.resolve(opts.iosArm64)] : null
     const iosArm64Sim = opts.iosArm64Simulator
       ? ['ios-arm64-simulator', path.resolve(opts.iosArm64Simulator)]
