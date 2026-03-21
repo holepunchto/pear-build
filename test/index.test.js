@@ -140,14 +140,19 @@ test('win32: deploy directory', async function (t) {
   const expected = new Localdrive(path.join(out, 'expected'))
 
   const win32X64App = path.join(desktopDir, 'out', 'HelloPear-win32-x64', 'HelloPear.msix')
+  const win32Arm64App = path.join(desktopDir, 'out', 'HelloPear-win32-arm64', 'HelloPear.msix')
 
-  const targets = [['win32-x64', win32X64App]]
+  const targets = [
+    ['win32-x64', win32X64App],
+    ['win32-arm64', win32Arm64App]
+  ]
 
   const events = []
   const runner = build({
     package: path.join(desktopDir, 'package.json'),
     target,
-    win32X64App
+    win32X64App,
+    win32Arm64App
   })
 
   runner.on('mirroring', () => events.push('mirroring'))
@@ -164,11 +169,11 @@ test('win32: deploy directory', async function (t) {
   }
   const mirror = new MirrorDrive(expected, new Localdrive(target), { dryRun: true })
   await mirror.done()
-  t.is(mirror.count.files, 2)
+  t.is(mirror.count.files, 3)
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
-  t.alike(events, ['mirroring', 'mirrored'])
+  t.alike(events, ['mirroring', 'mirroring', 'mirrored', 'mirrored'])
 })
 
 test('ios: deploy directory', async function (t) {

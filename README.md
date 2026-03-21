@@ -28,6 +28,7 @@ node bin.js \
     --linux-arm64-app ./test/fixtures/hello-pear-electron/out/HelloPear-linux-arm64/HelloPear.AppImage \
     --linux-x64-app ./test/fixtures/hello-pear-electron/out/HelloPear-linux-x64/HelloPear.AppImage \
     --win32-x64-app ./test/fixtures/hello-pear-electron/out/HelloPear-win32-x64/HelloPear.msix \
+    --win32-arm64-app ./test/fixtures/hello-pear-electron/out/HelloPear-win32-arm64/HelloPear.msix \
     --ios-arm64 ./test/fixtures/hello-pear-react-native/ota/ios/HelloPear \
     --ios-arm64-simulator ./test/fixtures/hello-pear-react-native/ota/ios/HelloPear \
     --ios-x64-simulator ./test/fixtures/hello-pear-react-native/ota/ios/HelloPear \
@@ -35,10 +36,10 @@ node bin.js \
     --target ./my-build
 ```
 
-`$ tree my-build/`
+`$ tree -L 5 -I Contents my-build/`
 
 ```bash
-my-build
+my-build/
 ├── by-arch
 │   ├── android-arm64
 │   │   └── app
@@ -68,10 +69,15 @@ my-build
 │   ├── linux-x64
 │   │   └── app
 │   │       └── HelloPear.AppImage
+│   ├── win32-arm64
+│   │   └── app
+│   │       └── HelloPear.msix
 │   └── win32-x64
 │       └── app
 │           └── HelloPear.msix
 └── package.json
+
+28 directories, 9 files
 ```
 
 ## License
