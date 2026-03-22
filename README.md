@@ -6,6 +6,14 @@
 npm install -g pear-build
 ```
 
+## Supported platforms
+
+* Linux: `linux-arm64`, `linux-x64`
+* macOS: `darwin-arm64`, `darwin-x64`
+* Windows: `win32-arm64`, `win32-x64`
+* iOS: `ios-arm64`, `ios-arm64-simulator`, `ios-x64-simulator`
+* Android: `android-arm64`
+
 ## Usage
 
 Create a build dir outside the project root.
@@ -36,7 +44,7 @@ node bin.js \
     --target ./my-build
 ```
 
-`$ tree -L 5 -I Contents my-build/`
+`$ tree my-build/`
 
 ```bash
 my-build/
@@ -76,8 +84,6 @@ my-build/
 │       └── app
 │           └── HelloPear.msix
 └── package.json
-
-28 directories, 9 files
 ```
 
 ## License
