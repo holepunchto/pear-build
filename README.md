@@ -6,7 +6,7 @@
 npm install -g pear-build
 ```
 
-## Supported platforms
+## Supported Platforms
 
 - Linux: `linux-arm64`, `linux-x64`
 - macOS: `darwin-arm64`, `darwin-x64`
