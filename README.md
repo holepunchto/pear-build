@@ -8,11 +8,11 @@ npm install -g pear-build
 
 ## Supported platforms
 
-* Linux: `linux-arm64`, `linux-x64`
-* macOS: `darwin-arm64`, `darwin-x64`
-* Windows: `win32-arm64`, `win32-x64`
-* iOS: `ios-arm64`, `ios-arm64-simulator`, `ios-x64-simulator`
-* Android: `android-arm64`
+- Linux: `linux-arm64`, `linux-x64`
+- macOS: `darwin-arm64`, `darwin-x64`
+- Windows: `win32-arm64`, `win32-x64`
+- iOS: `ios-arm64`, `ios-arm64-simulator`, `ios-x64-simulator`
+- Android: `android-arm64`
 
 ## Usage
 
