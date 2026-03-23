@@ -11,7 +11,7 @@ const desktopDir = path.join(__dirname, 'fixtures', 'hello-pear-electron')
 const mobileDir = path.join(__dirname, 'fixtures', 'hello-pear-react-native')
 
 test('darwin: deploy directory', async function (t) {
-  t.plan(5)
+  t.plan(6)
   const out = await tmp()
   const src = new Localdrive(desktopDir)
   const pkg = await src.get('/package.json')
@@ -52,11 +52,12 @@ test('darwin: deploy directory', async function (t) {
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
-  t.alike(events, ['mirroring', 'mirroring', 'mirrored', 'mirrored'])
+  t.is(events.filter((event) => event === 'mirroring').length, 2)
+  t.is(events.filter((event) => event === 'mirrored').length, 2)
 })
 
 test('linux: deploy directory', async function (t) {
-  t.plan(5)
+  t.plan(6)
   const out = await tmp()
   const src = new Localdrive(desktopDir)
   const pkg = await src.get('/package.json')
@@ -97,11 +98,12 @@ test('linux: deploy directory', async function (t) {
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
-  t.alike(events, ['mirroring', 'mirroring', 'mirrored', 'mirrored'])
+  t.is(events.filter((event) => event === 'mirroring').length, 2)
+  t.is(events.filter((event) => event === 'mirrored').length, 2)
 })
 
 test('linux: preserve executable permissions', async function (t) {
-  t.plan(3)
+  t.plan(4)
   const out = await tmp()
   const target = path.join(out, 'build')
   const linuxArm64App = path.join(desktopDir, 'out', 'HelloPear-linux-arm64', 'HelloPear.AppImage')
@@ -128,11 +130,12 @@ test('linux: preserve executable permissions', async function (t) {
 
   t.is(inputArm64.mode, outputArm64.mode)
   t.is(inputX86.mode, outputX86.mode)
-  t.alike(events, ['mirroring', 'mirroring', 'mirrored', 'mirrored'])
+  t.is(events.filter((event) => event === 'mirroring').length, 2)
+  t.is(events.filter((event) => event === 'mirrored').length, 2)
 })
 
 test('win32: deploy directory', async function (t) {
-  t.plan(5)
+  t.plan(6)
   const out = await tmp()
   const src = new Localdrive(desktopDir)
   const pkg = await src.get('/package.json')
@@ -140,14 +143,19 @@ test('win32: deploy directory', async function (t) {
   const expected = new Localdrive(path.join(out, 'expected'))
 
   const win32X64App = path.join(desktopDir, 'out', 'HelloPear-win32-x64', 'HelloPear.msix')
+  const win32Arm64App = path.join(desktopDir, 'out', 'HelloPear-win32-arm64', 'HelloPear.msix')
 
-  const targets = [['win32-x64', win32X64App]]
+  const targets = [
+    ['win32-x64', win32X64App],
+    ['win32-arm64', win32Arm64App]
+  ]
 
   const events = []
   const runner = build({
     package: path.join(desktopDir, 'package.json'),
     target,
-    win32X64App
+    win32X64App,
+    win32Arm64App
   })
 
   runner.on('mirroring', () => events.push('mirroring'))
@@ -164,15 +172,16 @@ test('win32: deploy directory', async function (t) {
   }
   const mirror = new MirrorDrive(expected, new Localdrive(target), { dryRun: true })
   await mirror.done()
-  t.is(mirror.count.files, 2)
+  t.is(mirror.count.files, 3)
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
-  t.alike(events, ['mirroring', 'mirrored'])
+  t.is(events.filter((event) => event === 'mirroring').length, 2)
+  t.is(events.filter((event) => event === 'mirrored').length, 2)
 })
 
 test('ios: deploy directory', async function (t) {
-  t.plan(5)
+  t.plan(6)
   const out = await tmp()
   const src = new Localdrive(mobileDir)
   const pkg = await src.get('/package.json')
@@ -215,11 +224,12 @@ test('ios: deploy directory', async function (t) {
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
-  t.alike(events, ['mirroring', 'mirroring', 'mirroring', 'mirrored', 'mirrored', 'mirrored'])
+  t.is(events.filter((event) => event === 'mirroring').length, 3)
+  t.is(events.filter((event) => event === 'mirrored').length, 3)
 })
 
 test('android: deploy directory', async function (t) {
-  t.plan(5)
+  t.plan(6)
   const out = await tmp()
   const src = new Localdrive(mobileDir)
   const pkg = await src.get('/package.json')
@@ -254,5 +264,6 @@ test('android: deploy directory', async function (t) {
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
-  t.alike(events, ['mirroring', 'mirrored'])
+  t.is(events.filter((event) => event === 'mirroring').length, 1)
+  t.is(events.filter((event) => event === 'mirrored').length, 1)
 })
