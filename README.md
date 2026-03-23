@@ -47,7 +47,7 @@ node bin.js \
 `$ tree my-build/`
 
 ```bash
-my-build/
+my-build
 ├── by-arch
 │   ├── android-arm64
 │   │   └── app
