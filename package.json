@@ -44,9 +44,10 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "prettier --check . && lunte",
+    "make:test": "brittle-make-test test/all.mjs test/*.test.js",
     "test": "npm run test:node && npm run test:bare",
-    "test:bare": "brittle-bare --coverage test/all.js",
-    "test:node": "brittle-node --coverage test/all.js"
+    "test:bare": "brittle-bare --coverage test/all.mjs",
+    "test:node": "brittle-node --coverage test/all.mjs"
   },
   "dependencies": {
     "bare-events": "^2.8.2",
@@ -56,8 +57,7 @@
     "paparam": "^1.10.0"
   },
   "devDependencies": {
-    "bare-fs": "^4.5.3",
-    "brittle": "^3.19.1",
+    "brittle": "^4.0.0",
     "lunte": "^1.6.0",
     "mirror-drive": "^1.13.0",
     "prettier": "^3.7.4",
