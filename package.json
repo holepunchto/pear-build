@@ -1,9 +1,11 @@
 {
   "name": "pear-build",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "index.js",
   "type": "commonjs",
-  "bin": "bin.js",
+  "bin": {
+    "pear-build": "bin.js"
+  },
   "description": "Create project deployment folder",
   "author": "Holepunch Inc",
   "license": "Apache-2.0",
@@ -63,5 +65,17 @@
     "prettier": "^3.7.4",
     "prettier-config-holepunch": "^2.0.0",
     "test-tmp": "^1.4.0"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holepunchto/pear-build.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/holepunchto/pear-build/issues"
+  },
+  "homepage": "https://github.com/holepunchto/pear-build#readme"
 }
