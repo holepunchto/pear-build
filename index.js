@@ -13,7 +13,8 @@ class Build extends EventEmitter {
 
   async run(opts) {
     const pkgPath = path.resolve(opts.package)
-    const pkg = require(pkgPath)
+    const pkgFile = await fs.promises.readFile(pkgPath, 'utf-8')
+    const pkg = JSON.parse(pkgFile)
     const { target = path.resolve(pkg.name + '-' + pkg.version) } = opts
     const darwinArm64App = opts.darwinArm64App
       ? ['darwin-arm64', path.resolve(opts.darwinArm64App)]
