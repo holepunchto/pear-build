@@ -81,7 +81,10 @@ class Build extends EventEmitter {
     const promises = []
     for (const [arch, app] of apps) {
       if (path.basename(app, path.extname(app)) !== appName) {
-        throw ERR_INVALID_APP_NAME(`expected directory ${appName} but got ${path.basename(app)} for ${arch}`, { arch, app })
+        throw ERR_INVALID_APP_NAME(
+          `expected directory ${appName} but got ${path.basename(app)} for ${arch}`,
+          { arch, app }
+        )
       }
       const archApp = path.join(byArch, arch, 'app')
       await fs.promises.mkdir(archApp, { recursive: true })
