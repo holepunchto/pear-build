@@ -13,6 +13,7 @@ class Build extends EventEmitter {
   }
 
   async run(opts) {
+    if (!opts.package) throw ERR_INVALID_INPUT('<package> must be specified.')
     const pkgPath = path.resolve(opts.package)
 
     let pkgFile
