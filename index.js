@@ -3,6 +3,7 @@ const path = require('path')
 const fs = require('fs')
 const { EventEmitter } = require('events')
 const Localdrive = require('localdrive')
+const { ERR_NOT_FOUND, ERR_INVALID_INPUT, ERR_INVALID_APP_NAME } = require('pear-errors')
 
 class Build extends EventEmitter {
   constructor(opts) {
@@ -13,8 +14,21 @@ class Build extends EventEmitter {
 
   async run(opts) {
     const pkgPath = path.resolve(opts.package)
-    const pkgFile = await fs.promises.readFile(pkgPath, 'utf-8')
-    const pkg = JSON.parse(pkgFile)
+
+    let pkgFile
+    try {
+      pkgFile = await fs.promises.readFile(pkgPath, 'utf-8')
+    } catch (err) {
+      throw ERR_NOT_FOUND('package.json not found', { path: pkgPath })
+    }
+
+    let pkg
+    try {
+      pkg = JSON.parse(pkgFile)
+    } catch (err) {
+      throw ERR_INVALID_INPUT('package.json is not a valid JSON', { path: pkgPath })
+    }
+
     const { target = path.resolve(pkg.name + '-' + pkg.version) } = opts
     const darwinArm64App = opts.darwinArm64App
       ? ['darwin-arm64', path.resolve(opts.darwinArm64App)]
@@ -67,7 +81,7 @@ class Build extends EventEmitter {
     const promises = []
     for (const [arch, app] of apps) {
       if (path.basename(app, path.extname(app)) !== appName) {
-        throw new Error(`expected directory ${appName} but got ${path.basename(app)} for ${arch}`)
+        throw ERR_INVALID_APP_NAME(`expected directory ${appName} but got ${path.basename(app)} for ${arch}`, { arch, app })
       }
       const archApp = path.join(byArch, arch, 'app')
       await fs.promises.mkdir(archApp, { recursive: true })
