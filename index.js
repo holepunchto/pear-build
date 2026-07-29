@@ -13,7 +13,7 @@ class Build extends EventEmitter {
   }
 
   async run(opts) {
-    if (!opts.package) throw ERR_INVALID_INPUT('<package> must be specified.')
+    if (!opts.package) throw ERR_INVALID_INPUT('package.json path must be specified.')
     const pkgPath = path.resolve(opts.package)
 
     const pkgFile = await fs.promises.readFile(pkgPath, 'utf8').catch((err) => {
