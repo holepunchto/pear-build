@@ -16,12 +16,11 @@ class Build extends EventEmitter {
     if (!opts.package) throw ERR_INVALID_INPUT('<package> must be specified.')
     const pkgPath = path.resolve(opts.package)
 
-    let pkgFile
-    try {
-      pkgFile = await fs.promises.readFile(pkgPath, 'utf-8')
-    } catch (err) {
-      throw ERR_NOT_FOUND('package.json not found', { path: pkgPath })
-    }
+    const pkgFile = await fs.promises.readFile(pkgPath, 'utf8').catch((err) => {
+      throw err.code === 'ENOENT'
+        ? ERR_NOT_FOUND('package.json not found', { path: pkgPath, cause: err })
+        : err
+    })
 
     let pkg
     try {
