@@ -17,9 +17,11 @@ class Build extends EventEmitter {
     const pkgPath = path.resolve(opts.package)
 
     const pkgFile = await fs.promises.readFile(pkgPath, 'utf8').catch((err) => {
-      throw err.code === 'ENOENT'
-        ? ERR_NOT_FOUND('package.json not found', { path: pkgPath, cause: err })
-        : err
+      if (err.code === 'ENOENT')
+        throw ERR_NOT_FOUND('package.json not found', { path: pkgPath, cause: err })
+      if (err.code === 'EISDIR')
+        throw ERR_INVALID_INPUT('package.json must be a file', { path: pkgPath, cause: err })
+      throw err
     })
 
     let pkg
