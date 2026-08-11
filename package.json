@@ -56,7 +56,8 @@
     "bare-fs": "^4.5.3",
     "bare-path": "^3.0.0",
     "localdrive": "^2.2.0",
-    "paparam": "^1.10.0"
+    "paparam": "^1.10.0",
+    "pear-errors": "^1.0.1"
   },
   "devDependencies": {
     "brittle": "^4.0.0",
