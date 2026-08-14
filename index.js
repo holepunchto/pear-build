@@ -132,7 +132,7 @@ async function getParsedJSON(name, path) {
   try {
     return JSON.parse(file)
   } catch (err) {
-    throw ERR_INVALID_INPUT('package.json is not a valid JSON', { path })
+    throw ERR_INVALID_INPUT(name + ' is not a valid JSON', { path, cause: err })
   }
 }
 
