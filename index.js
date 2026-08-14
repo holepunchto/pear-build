@@ -15,22 +15,15 @@ class Build extends EventEmitter {
   async run(opts) {
     if (!opts.package) throw ERR_INVALID_INPUT('package.json path must be specified.')
     const pkgPath = path.resolve(opts.package)
+    const pkg = await getParsedJSON('package.json', pkgPath)
 
-    const pkgFile = await fs.promises.readFile(pkgPath, 'utf8').catch((err) => {
-      if (err.code === 'ENOENT') {
-        throw ERR_NOT_FOUND('package.json not found', { path: pkgPath, cause: err })
-      }
-      if (err.code === 'EISDIR') {
-        throw ERR_INVALID_INPUT('package.json must be a file', { path: pkgPath, cause: err })
-      }
-      throw err
-    })
-
-    let pkg
-    try {
-      pkg = JSON.parse(pkgFile)
-    } catch (err) {
-      throw ERR_INVALID_INPUT('package.json is not a valid JSON', { path: pkgPath })
+    let configPath, config
+    if (opts.config) {
+      configPath = path.resolve(opts.config)
+      config = await getParsedJSON('pear.json', configPath)
+    } else if (pkg.dependencies['react-native-bare-kit']) {
+      // in mobile react-native-bare-kit needs to be listed in project's deps
+      throw ERR_INVALID_INPUT('pear.json path must be specified.')
     }
 
     const { target = path.resolve(pkg.name + '-' + pkg.version) } = opts
@@ -65,6 +58,13 @@ class Build extends EventEmitter {
       path.join(target, 'package.json'),
       await fs.promises.readFile(pkgPath)
     )
+
+    if (config) {
+      await fs.promises.writeFile(
+        path.join(target, 'pear.json'),
+        await fs.promises.readFile(configPath)
+      )
+    }
 
     const apps = [
       darwinArm64App,
@@ -115,6 +115,24 @@ class Build extends EventEmitter {
 
   async done() {
     return await this._running
+  }
+}
+
+async function getParsedJSON(name, path) {
+  const file = await fs.promises.readFile(path, 'utf8').catch((err) => {
+    if (err.code === 'ENOENT') {
+      throw ERR_NOT_FOUND(name + ' not found', { path, cause: err })
+    }
+    if (err.code === 'EISDIR') {
+      throw ERR_INVALID_INPUT(name + ' must be a file', { path, cause: err })
+    }
+    throw err
+  })
+
+  try {
+    return JSON.parse(file)
+  } catch (err) {
+    throw ERR_INVALID_INPUT('package.json is not a valid JSON', { path })
   }
 }
 

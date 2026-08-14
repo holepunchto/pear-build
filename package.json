@@ -17,6 +17,7 @@
     "summary": "Create project deployment folder",
     "flag --package [path]": "Path to project package.json",
     "flag --target [path]": "Target build dir",
+    "flag --config [path]": "Path to project pear.json (mandatory for mobile)",
     "flag --darwin-arm64-app [path]": "Path to Mac ARM64 app",
     "flag --darwin-x64-app [path]": "Path to Mac x64 app",
     "flag --linux-arm64-app [path]": "Path to Linux ARM64 app",
