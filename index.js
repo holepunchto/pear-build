@@ -21,7 +21,7 @@ class Build extends EventEmitter {
     if (opts.config) {
       configPath = path.resolve(opts.config)
       config = await getParsedJSON('pear.json', configPath)
-    } else if (pkg.dependencies['react-native-bare-kit']) {
+    } else if (pkg.dependencies?.['react-native-bare-kit']) {
       // in mobile react-native-bare-kit needs to be listed in project's deps
       throw ERR_INVALID_INPUT('pear.json path must be specified.')
     }
