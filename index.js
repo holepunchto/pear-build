@@ -22,7 +22,7 @@ class Build extends EventEmitter {
       throw ERR_INVALID_INPUT('pear.json path must be specified.')
     }
     const configPath = opts.config && path.resolve(opts.config)
-    const config = configPath && await getParsedJSON('pear.json', configPath)
+    const config = configPath && (await getParsedJSON('pear.json', configPath))
 
     const { target = path.resolve(pkg.name + '-' + pkg.version) } = opts
     const darwinArm64App = opts.darwinArm64App
