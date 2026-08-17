@@ -185,6 +185,7 @@ test('ios: deploy directory', async function (t) {
   const out = await tmp()
   const src = new Localdrive(mobileDir)
   const pkg = await src.get('/package.json')
+  const cfg = await src.get('/pear.json')
   const target = path.join(out, 'build')
   const expected = new Localdrive(path.join(out, 'expected'))
 
@@ -200,6 +201,7 @@ test('ios: deploy directory', async function (t) {
   const events = []
   const runner = build({
     package: path.join(mobileDir, 'package.json'),
+    config: path.join(mobileDir, 'pear.json'),
     target,
     iosArm64,
     iosArm64Simulator,
@@ -211,6 +213,7 @@ test('ios: deploy directory', async function (t) {
   await runner.done()
 
   await expected.put('/package.json', pkg)
+  await expected.put('/pear.json', cfg)
   for (const [arch, app] of targets) {
     await new Localdrive(path.dirname(app))
       .mirror(new Localdrive(path.join(expected.root, 'by-arch', arch, 'app')), {
@@ -220,7 +223,7 @@ test('ios: deploy directory', async function (t) {
   }
   const mirror = new MirrorDrive(expected, new Localdrive(target), { dryRun: true })
   await mirror.done()
-  t.is(mirror.count.files, 4)
+  t.is(mirror.count.files, 5)
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
@@ -233,6 +236,7 @@ test('android: deploy directory', async function (t) {
   const out = await tmp()
   const src = new Localdrive(mobileDir)
   const pkg = await src.get('/package.json')
+  const cfg = await src.get('/pear.json')
   const target = path.join(out, 'build')
   const expected = new Localdrive(path.join(out, 'expected'))
 
@@ -242,6 +246,7 @@ test('android: deploy directory', async function (t) {
   const events = []
   const runner = build({
     package: path.join(mobileDir, 'package.json'),
+    config: path.join(mobileDir, 'pear.json'),
     target,
     androidArm64
   })
@@ -251,6 +256,7 @@ test('android: deploy directory', async function (t) {
   await runner.done()
 
   await expected.put('/package.json', pkg)
+  await expected.put('/pear.json', cfg)
   for (const [arch, app] of targets) {
     await new Localdrive(path.dirname(app))
       .mirror(new Localdrive(path.join(expected.root, 'by-arch', arch, 'app')), {
@@ -260,7 +266,7 @@ test('android: deploy directory', async function (t) {
   }
   const mirror = new MirrorDrive(expected, new Localdrive(target), { dryRun: true })
   await mirror.done()
-  t.is(mirror.count.files, 2)
+  t.is(mirror.count.files, 3)
   t.is(mirror.count.add, 0)
   t.is(mirror.count.remove, 0)
   t.is(mirror.count.change, 0)
