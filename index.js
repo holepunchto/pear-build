@@ -17,14 +17,12 @@ class Build extends EventEmitter {
     const pkgPath = path.resolve(opts.package)
     const pkg = await getParsedJSON('package.json', pkgPath)
 
-    let configPath, config
-    if (opts.config) {
-      configPath = path.resolve(opts.config)
-      config = await getParsedJSON('pear.json', configPath)
-    } else if (pkg.dependencies?.['react-native-bare-kit']) {
+    if (!opts.config && pkg.dependencies?.['react-native-bare-kit']) {
       // in mobile react-native-bare-kit needs to be listed in project's deps
       throw ERR_INVALID_INPUT('pear.json path must be specified.')
     }
+    const configPath = opts.config && path.resolve(opts.config)
+    const config = configPath && await getParsedJSON('pear.json', configPath)
 
     const { target = path.resolve(pkg.name + '-' + pkg.version) } = opts
     const darwinArm64App = opts.darwinArm64App
