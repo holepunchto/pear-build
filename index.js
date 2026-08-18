@@ -80,6 +80,9 @@ class Build extends EventEmitter {
     const noop = () => {}
     const promises = []
     for (const [arch, app] of apps) {
+      if (!fs.existsSync(app)) {
+        throw new Error(`${app} does not exists`)
+      }
       if (path.basename(app, path.extname(app)) !== appName) {
         throw ERR_INVALID_APP_NAME(
           `expected directory ${appName} but got ${path.basename(app)} for ${arch}`,
