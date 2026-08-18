@@ -41,6 +41,7 @@ node bin.js \
     --ios-arm64-simulator ./test/fixtures/hello-pear-react-native/ota/ios/HelloPear \
     --ios-x64-simulator ./test/fixtures/hello-pear-react-native/ota/ios/HelloPear \
     --android-arm64 ./test/fixtures/hello-pear-react-native/ota/android/HelloPear \
+    --config ./test/fixtures/hello-pear-react-native/pear.json \
     --target ./my-build
 ```
 
@@ -84,6 +85,7 @@ my-build
 │       └── app
 │           └── HelloPear.msix
 └── package.json
+└── pear.json
 ```
 
 ## License
