@@ -26,17 +26,27 @@ pear-build \
     --target=./my-build
 ```
 
+Each `*-app` flag can be passed more than once to place several artifacts under the same architecture. Every artifact must be named after `productName` (or `name`), or after one of the `bin` names when `bin` is an object:
+
+```bash
+pear-build \
+    --package=./my-app/package.json \
+    --darwin-arm64-app ./my-app/MyApp-darwin-arm64/MyApp.app \
+    --darwin-arm64-app ./my-app/MyApp-darwin-arm64/my-app \
+    --target=./my-build
+```
+
 ## Example
 
 ```bash
 node bin.js \
     --package ./test/fixtures/hello-pear-electron/package.json \
-    --darwin-arm64-app ./test/fixtures/hello-pear-electron/out/HelloPear-darwin-arm64/HelloPear.app \
-    --darwin-x64-app ./test/fixtures/hello-pear-electron/out/HelloPear-darwin-x64/HelloPear.app \
-    --linux-arm64-app ./test/fixtures/hello-pear-electron/out/HelloPear-linux-arm64/HelloPear.AppImage \
-    --linux-x64-app ./test/fixtures/hello-pear-electron/out/HelloPear-linux-x64/HelloPear.AppImage \
-    --win32-x64-app ./test/fixtures/hello-pear-electron/out/HelloPear-win32-x64/HelloPear.msix \
-    --win32-arm64-app ./test/fixtures/hello-pear-electron/out/HelloPear-win32-arm64/HelloPear.msix \
+    --darwin-arm64-app ./test/fixtures/hello-pear-electron/by-arch/HelloPear-darwin-arm64/HelloPear.app \
+    --darwin-x64-app ./test/fixtures/hello-pear-electron/by-arch/HelloPear-darwin-x64/HelloPear.app \
+    --linux-arm64-app ./test/fixtures/hello-pear-electron/by-arch/HelloPear-linux-arm64/HelloPear.AppImage \
+    --linux-x64-app ./test/fixtures/hello-pear-electron/by-arch/HelloPear-linux-x64/HelloPear.AppImage \
+    --win32-x64-app ./test/fixtures/hello-pear-electron/by-arch/HelloPear-win32-x64/HelloPear.msix \
+    --win32-arm64-app ./test/fixtures/hello-pear-electron/by-arch/HelloPear-win32-arm64/HelloPear.msix \
     --ios-arm64 ./test/fixtures/hello-pear-react-native/ota/ios/HelloPear \
     --ios-arm64-simulator ./test/fixtures/hello-pear-react-native/ota/ios/HelloPear \
     --ios-x64-simulator ./test/fixtures/hello-pear-react-native/ota/ios/HelloPear \
