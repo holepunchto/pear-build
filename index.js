@@ -23,28 +23,25 @@ class Build extends EventEmitter {
     const config = configPath && (await getParsedJSON('pear.json', configPath))
 
     const { target = path.resolve(pkg.name + '-' + pkg.version) } = opts
-    const darwinArm64App = opts.darwinArm64App
-      ? ['darwin-arm64', path.resolve(opts.darwinArm64App)]
-      : null
-    const darwinX64App = opts.darwinX64App ? ['darwin-x64', path.resolve(opts.darwinX64App)] : null
-    const linuxArm64App = opts.linuxArm64App
-      ? ['linux-arm64', path.resolve(opts.linuxArm64App)]
-      : null
-    const linuxX64App = opts.linuxX64App ? ['linux-x64', path.resolve(opts.linuxX64App)] : null
-    const win32X64App = opts.win32X64App ? ['win32-x64', path.resolve(opts.win32X64App)] : null
-    const win32Arm64App = opts.win32Arm64App
-      ? ['win32-arm64', path.resolve(opts.win32Arm64App)]
-      : null
-    const iosArm64 = opts.iosArm64 ? ['ios-arm64', path.resolve(opts.iosArm64)] : null
-    const iosArm64Sim = opts.iosArm64Simulator
-      ? ['ios-arm64-simulator', path.resolve(opts.iosArm64Simulator)]
-      : null
-    const iosx64Sim = opts.iosX64Simulator
-      ? ['ios-x64-simulator', path.resolve(opts.iosX64Simulator)]
-      : null
-    const androidArm64 = opts.androidArm64
-      ? ['android-arm64', path.resolve(opts.androidArm64)]
-      : null
+    const archs = {
+      'darwin-arm64': opts.darwinArm64App,
+      'darwin-x64': opts.darwinX64App,
+      'linux-arm64': opts.linuxArm64App,
+      'linux-x64': opts.linuxX64App,
+      'win32-x64': opts.win32X64App,
+      'win32-arm64': opts.win32Arm64App,
+      'ios-arm64': opts.iosArm64,
+      'ios-arm64-simulator': opts.iosArm64Simulator,
+      'ios-x64-simulator': opts.iosX64Simulator,
+      'android-arm64': opts.androidArm64
+    }
+    const apps = []
+    for (const [arch, app] of Object.entries(archs)) {
+      if (!app) continue
+      for (const each of Array.isArray(app) ? app : [app]) {
+        if (each) apps.push([arch, path.resolve(each)])
+      }
+    }
 
     const byArch = path.join(target, 'by-arch')
 
@@ -62,20 +59,9 @@ class Build extends EventEmitter {
       )
     }
 
-    const apps = [
-      darwinArm64App,
-      darwinX64App,
-      linuxArm64App,
-      linuxX64App,
-      win32X64App,
-      win32Arm64App,
-      iosArm64,
-      iosArm64Sim,
-      iosx64Sim,
-      androidArm64
-    ].filter(Boolean)
-
     const appName = pkg.productName ?? pkg.name
+    const binNames = pkg.bin && typeof pkg.bin === 'object' ? Object.keys(pkg.bin) : []
+    const appNames = [...new Set([appName, ...binNames])]
 
     const noop = () => {}
     const promises = []
@@ -83,9 +69,9 @@ class Build extends EventEmitter {
       if (!fs.existsSync(app)) {
         throw new Error(`${app} does not exists`)
       }
-      if (path.basename(app, path.extname(app)) !== appName) {
+      if (appNames.includes(path.basename(app, path.extname(app))) === false) {
         throw ERR_INVALID_APP_NAME(
-          `expected directory ${appName} but got ${path.basename(app)} for ${arch}`,
+          `expected ${appNames.join(' or ')} but got ${path.basename(app)} for ${arch}`,
           { arch, app }
         )
       }

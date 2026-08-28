@@ -1,0 +1,11 @@
+{
+  "name": "hello-pear-bare",
+  "productName": "hello-pear",
+  "bin": {
+    "hello-pear": "./bin/hello-pear.js",
+    "hello-pear-transport": "./bin/hello-pear-transport.js"
+  },
+  "version": "0.0.0",
+  "private": true,
+  "upgrade": "pear://i9s8f35oqtjg3k5t1zbdpf1kz3uyk5x5qi65q1akrxypf3zcmxzo"
+}

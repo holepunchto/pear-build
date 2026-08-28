@@ -5,10 +5,13 @@ const test = require('brittle')
 const tmp = require('test-tmp')
 const Localdrive = require('localdrive')
 const MirrorDrive = require('mirror-drive')
+const { command } = require('paparam')
 const build = require('../index')
+const manifest = require('../package')
 
 const desktopDir = path.join(__dirname, 'fixtures', 'hello-pear-electron')
 const mobileDir = path.join(__dirname, 'fixtures', 'hello-pear-react-native')
+const bareDir = path.join(__dirname, 'fixtures', 'hello-pear-bare')
 
 test('darwin: deploy directory', async function (t) {
   t.plan(6)
@@ -18,8 +21,8 @@ test('darwin: deploy directory', async function (t) {
   const target = path.join(out, 'build')
   const expected = new Localdrive(path.join(out, 'expected'))
 
-  const darwinArm64App = path.join(desktopDir, 'out', 'HelloPear-darwin-arm64', 'HelloPear.app')
-  const darwinX64App = path.join(desktopDir, 'out', 'HelloPear-darwin-x64', 'HelloPear.app')
+  const darwinArm64App = path.join(desktopDir, 'by-arch', 'HelloPear-darwin-arm64', 'HelloPear.app')
+  const darwinX64App = path.join(desktopDir, 'by-arch', 'HelloPear-darwin-x64', 'HelloPear.app')
 
   const targets = [
     ['darwin-arm64', darwinArm64App],
@@ -56,6 +59,166 @@ test('darwin: deploy directory', async function (t) {
   t.is(events.filter((event) => event === 'mirrored').length, 2)
 })
 
+test('*-app flags are multiple', async function (t) {
+  const appFlags = [
+    ['--darwin-arm64-app', 'darwinArm64App'],
+    ['--darwin-x64-app', 'darwinX64App'],
+    ['--linux-arm64-app', 'linuxArm64App'],
+    ['--linux-x64-app', 'linuxX64App'],
+    ['--win32-x64-app', 'win32X64App'],
+    ['--win32-arm64-app', 'win32Arm64App']
+  ]
+  t.plan(appFlags.length * 2 + 1)
+
+  for (const [flag, name] of appFlags) {
+    t.alike(parse([flag, 'a']).flags[name], ['a'], flag + ' once is an array')
+    t.alike(parse([flag, 'a', flag, 'b']).flags[name], ['a', 'b'], flag + ' twice is an array')
+  }
+
+  t.is(parse(['--target', 'a', '--target', 'b']).flags.target, 'b', '--target is not multiple')
+
+  function parse(args) {
+    return command(manifest.name, manifest.command).parse(['--package', 'package.json', ...args])
+  }
+})
+
+test('deploy directory with the same app flag passed multiple times', async function (t) {
+  t.plan(7)
+  const out = await tmp()
+  const src = new Localdrive(bareDir)
+  const pkg = await src.get('/package.json')
+  const target = path.join(out, 'build')
+  const expected = new Localdrive(path.join(out, 'expected'))
+
+  const darwinArm64App = path.join(bareDir, 'by-arch', 'darwin-arm64', 'app', 'hello-pear')
+  const darwinArm64Transport = path.join(
+    bareDir,
+    'by-arch',
+    'darwin-arm64',
+    'app',
+    'hello-pear-transport'
+  )
+
+  const targets = [
+    ['darwin-arm64', darwinArm64App],
+    ['darwin-arm64', darwinArm64Transport]
+  ]
+
+  const { flags } = command(manifest.name, manifest.command).parse([
+    '--package',
+    path.join(bareDir, 'package.json'),
+    '--target',
+    target,
+    '--darwin-arm64-app',
+    darwinArm64App,
+    '--darwin-arm64-app',
+    darwinArm64Transport
+  ])
+  t.alike(flags.darwinArm64App, [darwinArm64App, darwinArm64Transport])
+
+  const events = []
+  const runner = build(flags)
+
+  runner.on('mirroring', () => events.push('mirroring'))
+  runner.on('mirrored', () => events.push('mirrored'))
+  await runner.done()
+
+  await expected.put('/package.json', pkg)
+  for (const [arch, app] of targets) {
+    await new Localdrive(path.dirname(app))
+      .mirror(new Localdrive(path.join(expected.root, 'by-arch', arch, 'app')), {
+        prefix: '/' + path.basename(app)
+      })
+      .done()
+  }
+  const mirror = new MirrorDrive(expected, new Localdrive(target), { dryRun: true })
+  await mirror.done()
+  t.is(mirror.count.files, 3)
+  t.is(mirror.count.add, 0)
+  t.is(mirror.count.remove, 0)
+  t.is(mirror.count.change, 0)
+  t.is(events.filter((event) => event === 'mirroring').length, 2)
+  t.is(events.filter((event) => event === 'mirrored').length, 2)
+})
+
+test('bin names are valid app names', async function (t) {
+  t.plan(6)
+  const out = await tmp()
+  const src = new Localdrive(bareDir)
+  const pkg = await src.get('/package.json')
+  const target = path.join(out, 'build')
+  const expected = new Localdrive(path.join(out, 'expected'))
+
+  const linuxX64Transport = path.join(
+    bareDir,
+    'by-arch',
+    'linux-x64',
+    'app',
+    'hello-pear-transport'
+  )
+  const win32X64Transport = path.join(
+    bareDir,
+    'by-arch',
+    'win32-x64',
+    'app',
+    'hello-pear-transport.exe'
+  )
+
+  const targets = [
+    ['linux-x64', linuxX64Transport],
+    ['win32-x64', win32X64Transport]
+  ]
+
+  const events = []
+  const runner = build({
+    package: path.join(bareDir, 'package.json'),
+    target,
+    linuxX64App: [linuxX64Transport],
+    win32X64App: [win32X64Transport]
+  })
+
+  runner.on('mirroring', () => events.push('mirroring'))
+  runner.on('mirrored', () => events.push('mirrored'))
+  await runner.done()
+
+  await expected.put('/package.json', pkg)
+  for (const [arch, app] of targets) {
+    await new Localdrive(path.dirname(app))
+      .mirror(new Localdrive(path.join(expected.root, 'by-arch', arch, 'app')), {
+        prefix: '/' + path.basename(app)
+      })
+      .done()
+  }
+  const mirror = new MirrorDrive(expected, new Localdrive(target), { dryRun: true })
+  await mirror.done()
+  t.is(mirror.count.files, 3)
+  t.is(mirror.count.add, 0)
+  t.is(mirror.count.remove, 0)
+  t.is(mirror.count.change, 0)
+  t.is(events.filter((event) => event === 'mirroring').length, 2)
+  t.is(events.filter((event) => event === 'mirrored').length, 2)
+})
+
+test('app name must be the product name or a bin name', async function (t) {
+  t.plan(2)
+  const out = await tmp()
+
+  const runner = build({
+    package: path.join(bareDir, 'package.json'),
+    target: path.join(out, 'build'),
+    darwinArm64App: [path.join(bareDir, 'by-arch', 'darwin-arm64', 'app')]
+  })
+  runner.on('error', () => {})
+
+  const err = await runner.done().then(
+    () => null,
+    (err) => err
+  )
+
+  t.is(err?.code, 'ERR_INVALID_APP_NAME')
+  t.is(err?.message, 'expected hello-pear or hello-pear-transport but got app for darwin-arm64')
+})
+
 test('linux: deploy directory', async function (t) {
   t.plan(6)
   const out = await tmp()
@@ -64,8 +227,13 @@ test('linux: deploy directory', async function (t) {
   const target = path.join(out, 'build')
   const expected = new Localdrive(path.join(out, 'expected'))
 
-  const linuxArm64App = path.join(desktopDir, 'out', 'HelloPear-linux-arm64', 'HelloPear.AppImage')
-  const linuxX64App = path.join(desktopDir, 'out', 'HelloPear-linux-x64', 'HelloPear.AppImage')
+  const linuxArm64App = path.join(
+    desktopDir,
+    'by-arch',
+    'HelloPear-linux-arm64',
+    'HelloPear.AppImage'
+  )
+  const linuxX64App = path.join(desktopDir, 'by-arch', 'HelloPear-linux-x64', 'HelloPear.AppImage')
 
   const targets = [
     ['linux-arm64', linuxArm64App],
@@ -106,8 +274,13 @@ test('linux: preserve executable permissions', async function (t) {
   t.plan(4)
   const out = await tmp()
   const target = path.join(out, 'build')
-  const linuxArm64App = path.join(desktopDir, 'out', 'HelloPear-linux-arm64', 'HelloPear.AppImage')
-  const linuxX64App = path.join(desktopDir, 'out', 'HelloPear-linux-x64', 'HelloPear.AppImage')
+  const linuxArm64App = path.join(
+    desktopDir,
+    'by-arch',
+    'HelloPear-linux-arm64',
+    'HelloPear.AppImage'
+  )
+  const linuxX64App = path.join(desktopDir, 'by-arch', 'HelloPear-linux-x64', 'HelloPear.AppImage')
 
   const events = []
   const runner = build({
@@ -142,8 +315,8 @@ test('win32: deploy directory', async function (t) {
   const target = path.join(out, 'build')
   const expected = new Localdrive(path.join(out, 'expected'))
 
-  const win32X64App = path.join(desktopDir, 'out', 'HelloPear-win32-x64', 'HelloPear.msix')
-  const win32Arm64App = path.join(desktopDir, 'out', 'HelloPear-win32-arm64', 'HelloPear.msix')
+  const win32X64App = path.join(desktopDir, 'by-arch', 'HelloPear-win32-x64', 'HelloPear.msix')
+  const win32Arm64App = path.join(desktopDir, 'by-arch', 'HelloPear-win32-arm64', 'HelloPear.msix')
 
   const targets = [
     ['win32-x64', win32X64App],
