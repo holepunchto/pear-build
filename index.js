@@ -67,7 +67,7 @@ class Build extends EventEmitter {
     const promises = []
     for (const [arch, app] of apps) {
       if (!fs.existsSync(app)) {
-        throw new Error(`${app} does not exists`)
+        throw new ERR_NOT_FOUND(`${app} does not exist`)
       }
       if (appNames.includes(path.basename(app, path.extname(app))) === false) {
         throw ERR_INVALID_APP_NAME(
