@@ -23,6 +23,8 @@ class Build extends EventEmitter {
     const config = configPath && (await getParsedJSON('pear.json', configPath))
 
     const { target = path.resolve(pkg.name + '-' + pkg.version) } = opts
+    this.emit('building', { message: 'Building', pkg, target })
+
     const archs = {
       'darwin-arm64': opts.darwinArm64App,
       'darwin-x64': opts.darwinX64App,
@@ -67,7 +69,7 @@ class Build extends EventEmitter {
     const promises = []
     for (const [arch, app] of apps) {
       if (!fs.existsSync(app)) {
-        throw new Error(`${app} does not exists`)
+        throw new ERR_NOT_FOUND(`${app} does not exist`)
       }
       if (appNames.includes(path.basename(app, path.extname(app))) === false) {
         throw ERR_INVALID_APP_NAME(
