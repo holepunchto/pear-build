@@ -7,8 +7,8 @@ const cmd = command(pkg.name, pkg.command, async function (cmd) {
   if (cmd.flags.version) return console.log(`v${pkg.version}`)
   try {
     const runner = build(cmd.flags)
-    runner.on('building', ({ message, pkg }) =>
-      console.log(`${message} ${pkg.name} (v${pkg.version})...`)
+    runner.on('building', ({ message, pkg, target }) =>
+      console.log(`${message} ${pkg.name} (v${pkg.version}) into ${target}`)
     )
     runner.on('mirrored', (data) => console.log(data.from, data.message, data.to))
     runner.on('error', (err) => console.error(err))
