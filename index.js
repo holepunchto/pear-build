@@ -13,8 +13,7 @@ class Build extends EventEmitter {
   }
 
   async run(opts) {
-    if (!opts.package) throw ERR_INVALID_INPUT('package.json path must be specified.')
-    const pkgPath = path.resolve(opts.package)
+    const pkgPath = path.resolve(opts.package ?? './package.json')
     const pkg = await getParsedJSON('package.json', pkgPath)
 
     const isMobile = !!pkg.dependencies?.['react-native-bare-kit'] // in mobile react-native-bare-kit needs to be listed in project's deps
