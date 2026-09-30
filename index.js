@@ -43,6 +43,7 @@ class Build extends EventEmitter {
         if (each) apps.push([arch, path.resolve(each)])
       }
     }
+    if (apps.length === 0) throw ERR_INVALID_INPUT('at least one app build must be specified')
 
     const byArch = path.join(target, 'by-arch')
 
