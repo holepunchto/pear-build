@@ -15,7 +15,12 @@
   ],
   "command": {
     "summary": "Create project deployment folder",
-    "flag --package [path]": "Path to project package.json",
+    "flag --package [path]": [
+      "Path to project package.json",
+      {
+        "default": "./package.json"
+      }
+    ],
     "flag --target [path]": "Target build dir",
     "flag --config [path]": "Path to project pear.json (mandatory for mobile)",
     "flag --darwin-arm64-app [path]": [
